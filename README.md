@@ -1,2 +1,2 @@
 # subgroups
-This is a website that you can create hierarchical groups 
+This is a web app that you can create hierarchical groups 
