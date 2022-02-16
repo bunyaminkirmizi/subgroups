@@ -1,0 +1,29 @@
+extends ../base.pug
+
+block content
+	.row.mt-2.justify-content-center
+		.col-6
+			.wrap.text-center
+				.p-4.p-md-5
+					.d-flex.w-100
+							h3.mb-4 Login
+					form.signin-form(method='post')
+						.form-group.mb-3
+							label.label(for='name') Username
+							input.form-control(type='text' name='username' placeholder='Username' required='')
+						.form-group.mb-3
+							label.label(for='password') Password
+							input.form-control(type='password' name='password' placeholder='Password' required='')
+						.form-group
+							button.form-control.btn.btn-primary.rounded.submit.px-3(type='submit') Login
+						.form-group.d-md-flex
+							.w-50.text-left
+								label.checkbox-wrap.checkbox-primary.mb-0
+									| Remember Me
+									input(type='checkbox' checked='' name='rememberme')
+									span.checkmark
+							.w-50.text-md-right
+								a(href='#') Forgot Password
+					p.text-center
+						| Not a member? 
+						a(href='/signup') Sign Up

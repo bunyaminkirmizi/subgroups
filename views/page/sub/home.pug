@@ -1,0 +1,8 @@
+extends ../../base.pug
+include ../post/thumbmixin.pug
+
+block content
+	.container.col-12
+		if posts
+			each post in posts
+				+thumbnail(post,true)

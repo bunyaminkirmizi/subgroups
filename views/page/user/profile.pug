@@ -1,0 +1,14 @@
+extends ../../base.pug
+
+block content
+	.col-12.mt-2.text-center
+		.h3.row-12.mr-2
+			strong Username: 
+			=user.username
+		.h3.row-12.mr-2
+			strong Email: 
+			=user.email
+		.h3.row-12.mr-2
+			strong Register Date and Time:  
+			=user.register_timestamp
+		a.btn.btn-outline-success(href='update/') Update profile

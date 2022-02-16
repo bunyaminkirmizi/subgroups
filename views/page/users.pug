@@ -1,0 +1,6 @@
+extends ../base.pug
+
+block content
+	ul
+		for item in users
+			li= 'username: ' + item.username +' email: '+ item.email+' password: '+item.password
