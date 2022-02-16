@@ -48,8 +48,7 @@ app.get("/", async (req, res) => {
       title: "homepage",
       is_authenticated: false,
       data: "user not logged in",
-      groupdropdown: await group.get_group_dropdown(1),
-      //messages: messageque.consume_message(req.session)
+      groupdropdown: await group.get_group_dropdown(1)
     };
   }
   res.render("page/home.pug", options);
@@ -58,8 +57,7 @@ app.get("/", async (req, res) => {
 app.get("/login", (req, res) => {
   console.log("messages", req.session.messages);
   res.render("page/login.pug", {
-    title: "login",
-    // messages: messageque.consume_message(req.session)
+    title: "login"
   });
 });
 
@@ -75,9 +73,6 @@ app.post("/login", async (req, res) => {
     req.body.password,
     req.session
   );
-  // console.log(`login post:\n=>username: ${req.body.username}\n=>password: ${req.body.password}`)
-  // console.log(`\n=>rememberme: ${req.body.rememberme}`)
-  // console.log("===========================================================================")
   if (validation) {
     res.redirect("/");
   } else {
@@ -86,11 +81,6 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  // console.log(`signup post:\n=>useruname: ${req.body.username}`)
-  // console.log(`=>email: ${req.body.email}`)
-  // console.log(`=>password: ${req.body.password}`)
-
-  // console.log("=====================================================================================")
   if (
     auth.register({
       username: req.body.username,
