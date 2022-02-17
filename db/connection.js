@@ -4,7 +4,7 @@ const pool = mariadb.createPool({
   host: "localhost",
   user: "root",
   database: "unihub",
-  password: "ultrasecurepassword",
+  password: "",
   dateStrings: true,
   connectionLimit: 5,
 });

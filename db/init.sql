@@ -1,6 +1,8 @@
+--DROP DATABASE IF exists unihub;--DELETE DATABASE IF EXISTS
+
 CREATE DATABASE IF NOT EXISTS unihub; --CREATE DATABASE IF NOT EXISTS
 
-DROP DATABASE IF exists unihub;--DELETE DATABASE IF EXISTS
+CONNECT unihub;
 
 CREATE TABLE user(
     id INT NOT NULL auto_increment,
@@ -46,6 +48,4 @@ CREATE TABLE post (
     FOREIGN KEY (group_owner) REFERENCES groups (id)
 );
 
-INSERT INTO GROUPS (parent_group,name) values(1,"main");
-
-
+INSERT INTO groups (parent_group,name) values(1,"main");
