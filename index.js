@@ -17,7 +17,7 @@ app.use(session({
 
 app.post('/upload/:filename', upload.single('filename'), (req, res) => {
 
-  console.log(req.file)
+  // console.log(req.file)
   let filepath = null
   if(req.file){
     filepath = "/images/"+req.file.filename
@@ -36,14 +36,10 @@ const sub = require("./router/sub");
 app.use("/user", user);
 app.use("/post", post);
 app.use("/sub", sub);
-const users = require('./db/users');
 const port = process.env.PORT
 const auth = require('./db/auth');
 const groups = require('./db/groups');
-const { is_authanticated } = require('./db/auth')
-const { get_subs } = require('./db/groups')
 const posts = require('./db/posts')
-const { header, redirect } = require('express/lib/response')
 
 app.use(express.urlencoded({ extended: true })); //Used fore parsing body elements
 app.set('trust proxy', 1) // trust first proxy
@@ -59,11 +55,10 @@ app.get('/', async (req, res) => {
     group:{
       current: await groups.get_group(15),
       parent:{"group_id":"2","group_name":"prent"},
-      subs: await get_subs((await groups.get_group(15)).group_id)
-      }
-    })
-  })
-
+      subs: await groups.get_subs((await groups.get_group(15)).group_id)
+      }})
+    }
+  )
   
 app.get('/user/profile',auth.authentication_required, async (req, res) => {
 
@@ -83,7 +78,7 @@ app.get('/group/:group_id', async (req, res) => {
     const g_dropdown = {
       current:current_group,
       parent:{"group_id":"2","group_name":"parent"},
-      subs:await get_subs((await groups.get_group(group_id)).group_id)}
+      subs:await groups.get_subs((await groups.get_group(group_id)).group_id)}
     res.render('pages/group', {
       title: 'sub | '+ g_dropdown.current.group_name,
       user:req.session.user,
@@ -115,7 +110,6 @@ app.post('/group/new',auth.authentication_required, async (req, res) => {
 })
 
 app.get('/login/',auth.allow_just_not_logged_in, (req, res) => {
-  console.log("login page clicked") // delete after debug
   res.render('pages/login', {
     title: 'login',
   })

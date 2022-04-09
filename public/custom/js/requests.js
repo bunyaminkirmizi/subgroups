@@ -43,7 +43,6 @@ async function uploadfile() {
 	data.append('filename', input.files[0])
 
 	let url = '/upload/'+input.files[0].name;
-	console.log("tesfdaadsfdsfasdfasdgadsgdsfs");
 	try {
 		let response = await fetch(url, {
 			method: 'POST',

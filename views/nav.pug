@@ -145,7 +145,7 @@ if group
           h5#groupsModalSmLabel.modal-title.h4 Yeni grup ekle
           button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
         .modal-body
-          form.row.g-3(action='/group/new/' method='post')
+          form#sendgroupform.row.g-3(action='/group/new/' method='post')
             input.form-control(type='text' name='groupname' minLength="5" placeholder='Grup adı')
             input#hidden2(type='hidden' name='parent_group_id' value=group.current.group_id)
             button.btn.btn-outline-success.float-end(type='submit') Grup Ekle
@@ -165,7 +165,7 @@ if group
           //- form.row.g-3(action='/upload/filenameeessees' method='post')
           input#myFile.form-control.md-3.mb-2(type='file' name='filename')
           div#uploaded_files
-          form.row.g-3(action='/post/new/' method='post')
+          form#sendpostform.row.g-3(action='/post/new/' method='post')
             input.form-control(type='text' name='post_header' minLength="5" placeholder='Gönderi başlığı')
             textarea#editor.form-control.mt-0( name='post_body' rows='15' placeholder="İçerik")
             input#hidden2(type='hidden' name='group_id' value=group.current.group_id)
