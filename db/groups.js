@@ -86,7 +86,6 @@ async function get_subs(group_id) {
 		(await connect.pool.query(sqltext, values)).rows.forEach(element => {
 			groups.push( element)
 		});
-		// console.log("grupssss", groups);
 		return groups
 	  } catch (err) {
 		console.log(err.stack)

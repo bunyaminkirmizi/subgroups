@@ -9,5 +9,4 @@ router.param("postid", function (req, res, next, postid) {
   next();
 });
 
-
 module.exports = router;

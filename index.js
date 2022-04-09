@@ -4,18 +4,6 @@ const session = require('express-session')
 const multer  = require('multer')
 const upload = multer({ dest: './public/images/' })
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, './public/images/')
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, `${req.params.filename}-${Date.now()}.jpg`)
-//   }
-// })
-
-// var upload = multer({ storage: storage })
-
-
 require("dotenv").config();
 const app = express()
 app.use(session({
@@ -28,8 +16,7 @@ app.use(session({
 }))
 
 app.post('/upload/:filename', upload.single('filename'), (req, res) => {
-  // console.log(req)
-  // res.redirect()
+
   console.log(req.file)
   let filepath = null
   if(req.file){
@@ -39,9 +26,7 @@ app.post('/upload/:filename', upload.single('filename'), (req, res) => {
     "filename": req.params.filename,
     "filepath": filepath
   })
-  //  res.send("filesadfadsf")s
-  // res.send({`<img src=\"" +   +"\"><img>`)
-  // res.send("ok")
+
 })
 
 const user = require("./router/user");
@@ -66,9 +51,6 @@ app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', async (req, res) => {
-// console.log(await groups.get_group(7));
-  // res.redirect('/group/1')
-
   res.render('pages/home', {
     title: 'subgroups',
     user:req.session.user,
@@ -89,8 +71,6 @@ app.get('/user/profile',auth.authentication_required, async (req, res) => {
     title: 'subgroups',
     user:req.session.user,
     is_authenticated: auth.is_authanticated(req.session),
-
-    // message: {header:'Hello there!',body:"test" }
   })
 })
 
@@ -104,7 +84,6 @@ app.get('/group/:group_id', async (req, res) => {
       current:current_group,
       parent:{"group_id":"2","group_name":"parent"},
       subs:await get_subs((await groups.get_group(group_id)).group_id)}
-    // console.log("g_dropdown",g_dropdown)
     res.render('pages/group', {
       title: 'sub | '+ g_dropdown.current.group_name,
       user:req.session.user,
@@ -128,7 +107,6 @@ app.post('/group/new',auth.authentication_required, async (req, res) => {
   const parent_group_id =req.body.parent_group_id
   const user_id = req.session.user.user_id
   const new_group = await groups.create_group_under_parent(user_id,group_name,parent_group_id)
-  // console.log(new_group)
   if(new_group == undefined){
     res.redirect('/')
     return;
@@ -147,12 +125,10 @@ app.get('/register/',auth.allow_just_not_logged_in, (req, res) => {
   res.render('pages/register', {
     title: 'register',
     is_authenticated:  auth.is_authanticated(req.session),
-    // message: 'Hello there!' 
   })
 })
 
 app.get('/logout/',auth.authentication_required, (req, res) => {
-  // console.log('test--');
   req.session.user = null
   res.redirect('/')
 })
@@ -162,12 +138,9 @@ app.post('/login/', async (req, res) => {
   const password = req.body.password
   const remember_me = req.body.remember_me
   var message = null
-  // console.log(username,password,remember_me)
   const authentication = await auth.authenticate(username,password,remember_me);
   req.session.user = authentication[0]
   message = authentication[1]
-  // console.log(authentication);
-  // console.log(message)
   if( auth.is_authanticated(req.session)){
     res.redirect("/")
   }else{
@@ -183,7 +156,6 @@ app.post('/register/', async (req, res) => {
   const password = req.body.password
   const passwordagain = req.body.passwordagain
   const register = await auth.register(username,email,password,passwordagain)
-  // console.log(register);
   res.render('pages/register', {
     title: 'register',
     is_authenticated: false,

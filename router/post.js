@@ -10,11 +10,6 @@ const votes = require("../db/votes");
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
 
-// router.param("postid", function (req, res, next, postid) {
-//   req.postid = postid;
-//   next();
-// });
-
 async function ownership_required(req,res,next) {
 	const user_id = req.session.user.user_id
 	const post_id = req.query.post_id
@@ -33,24 +28,18 @@ router.post('/new/',auth.authentication_required, async (req, res) => {
 	const post_body = req.body.post_body
 	const post_header = req.body.post_header
 	const user_id = req.session.user.user_id
-	// console.log('fafafafafafafafafa');
 	console.log(await posts.add_post(user_id,group_id,post_header,post_body))
 	res.redirect('/group/'+group_id)
   
   })
 
 router.get('/detail', async (req, res) => {
-	// console.log(req.postid)
-	// res.send("detail id:" + req.postid)
-	
 	const post_id = req.query.post_id
 	const post = await posts.get_post(post_id)
-	// console.log(group_id,post_id);
 	const group_id = post.group_id
 	const current_group = await groups.get_group(group_id)
 	
 	if(current_group != undefined){
-		// console.log(await posts.get_post_by_group(15))
 		const g_dropdown = {
 		current:current_group,
 		parent:{"group_id":"2","group_name":"parent"},
@@ -86,9 +75,6 @@ router.post('/update/',authentication_required,ownership_required, async (req, r
 	await posts.update_post(post_id,post_header,post_body)
 	console.log("testsetesats")
 	res.redirect('/group/'+ group_id)
-
-	// res.send("update id:" + post_id)
-
 })
 
 router.get('/vote',auth.authentication_required, async (req, res) => {
@@ -96,9 +82,7 @@ router.get('/vote',auth.authentication_required, async (req, res) => {
 	const post_id = req.query.post_id
 	const vote = req.query.vote
 	let user_vote = undefined
-	// if user voted
 	const voted = (await votes.get_vote_type(user_id,post_id))
-	console.log("----->",voted,vote)
 	if(vote == 'up'){
 		console.log(voted,vote)
 		if(voted == true){
@@ -127,9 +111,7 @@ router.get('/vote',auth.authentication_required, async (req, res) => {
 	}
 	const vc = await votes.get_vote_count(post_id)
 	res.send({"vote_count": vc,"user_vote": user_vote});
-	
-	
+		
 })
-
 
 module.exports = router;

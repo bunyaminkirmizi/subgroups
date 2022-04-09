@@ -33,7 +33,6 @@ function email_validation(email) {
         
     var valid = emailRegex.test(email);
     if(!valid){
-		// console.error("AUTH: invalid email")
 		return [false,err_message("Invalid email")];
 	}
         
@@ -71,7 +70,6 @@ async function register(username,email,password,passwordagain) {
 		email: email_validation(email),
 		username: await username_validation(username)
 	}
-	// console.log(validation.username[0],validation.email[0],validation.password[0])
 	if(!validation.username[0]){
 		//username problem
 		return [false,validation.username[1]]
@@ -86,7 +84,6 @@ async function register(username,email,password,passwordagain) {
 	}
 	const hashed_password = await bcrypt.hash(password, 12);
 	users.add_user(username,email,hashed_password)
-	// console.log("[LOG]:",username,email,"registered to database")
 	return [true,top_notifications.top_bar_message("Success: ","Successfully registered. Now you can use log in page","success")]
 }
 async function authenticate(username,password,remember_me) {
@@ -99,10 +96,8 @@ async function authenticate(username,password,remember_me) {
 		return [undefined,err_message(e)]
 	}
 
-	// console.log("log:",password,db_user.password_hash);
 	if (await bcrypt.compare(password,db_user.password_hash)){
 		var success_message= username + " succesfully logged in"
-		// console.log(success_message);
 		return [db_user,undefined]
 	}else{
 		var e = "Wrong password!";
@@ -113,7 +108,6 @@ async function authenticate(username,password,remember_me) {
 }
 function is_authanticated(session) {
 	const user = session.user
-	// console.log("is authenticated check for",user);
 	if(session.user){
 		return true;
 	}else{
@@ -123,7 +117,6 @@ function is_authanticated(session) {
 
 function allow_just_not_logged_in(req,res,next) {
 	if(is_authanticated(req.session)){
-		// res.redirect("/login/")
 		res.redirect("/")
 	}else{
 		next()

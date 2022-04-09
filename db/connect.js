@@ -12,13 +12,13 @@ const pool = new Pool({
   })
 
 //open production
-// try {
-// const data = fs.readFileSync('db/init/tables.sql', 'utf8')
+try {
+const data = fs.readFileSync('db/init/tables.sql', 'utf8')
 
-// pool.query(data)
-// } catch (err) {
-// console.error(err)
-// }
+pool.query(data)
+} catch (err) {
+console.error(err)
+}
 
 module.exports = {
 	pool: pool

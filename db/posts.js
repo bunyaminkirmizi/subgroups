@@ -26,10 +26,8 @@ async function add_post(user_id,group_id,header,body) {
 	}
 	
 async function update_post(post_id,header,body) {
-	// console.log("tried to update",post_id,header,body)
 	const values = [header,body,post_id]
 	console.log(values)
-	// const values = []
 	connect.pool.query(
 		"UPDATE posts SET header = $1, body = $2 WHERE post_id = $3;",
 		values,
@@ -59,16 +57,13 @@ async function get_post(post_id) {
 
 	try {
 		let row = (await connect.pool.query(sqltext, values)).rows[0]
-		// console.log("row",row);
 		if(row !=undefined){
 			row['votecount'] = await votes.get_vote_count(post_id)
 		
 		row['sender'] = (await users.get_user_by_id(row.user_id)).username
 
 		}
-		// const user = await users.get_user_by_id(row.user_id)
-		console.log("------------------------------------------------------")
-		console.log("row",row);
+
 		return row
 		} catch (err) {
 		console.log(err.stack)

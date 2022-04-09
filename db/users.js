@@ -16,7 +16,6 @@ async function get_user_by_username(username) {
 	  } catch (err) {
 		console.log(err.stack)
 	  }
-	//   console.log(user,"got from database")
 	return user;
 	}
 async function get_user_by_id(user_id) {
@@ -28,7 +27,6 @@ async function get_user_by_id(user_id) {
 		} catch (err) {
 		console.log(err.stack)
 		}
-		// console.log(user,"got from database")
 		return user;
 	
 	}
