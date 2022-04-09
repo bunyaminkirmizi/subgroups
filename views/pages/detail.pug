@@ -1,0 +1,44 @@
+extends ../base.pug
+
+block content
+  .card.mb-3.button-to-the-top
+   .row.g-0
+     .col-md-2.text-center.mt-2
+       a.btn(href='/post/vote?post_id='+ post.post_id + '&vote=up'+'&page=detail')
+         // TODO: when upvote class turn text-succeed
+         svg.bi.bi-arrow-up(xmlns='http://www.w3.org/2000/svg' font-weight='bold' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
+           path(fill-rule='evenodd' d='M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z')
+       h4=post.votecount
+       a.btn(href='/post/vote?post_id='+ post.post_id + '&vote=down'+'&page=detail')
+         // TODO: when upvote class turn text-danger
+         svg.bi.bi-arrow-down(xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
+           path(fill-rule='evenodd' d='M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z')
+       br
+       if user
+        if post.user_id == user.user_id
+          a.btn.btn-outline-danger.delete-button.mt-2(href="/post/delete?post_id="+post.post_id)
+            i.fa.fa-trash
+          |  
+          a.btn.btn-outline-info.mt-2(type='button' data-bs-toggle='modal' data-bs-target='#updatePostModal'+post.post_id)
+            i.fa.fa-edit
+          //- (href="/post/update?post_id="+post.post_id)
+          
+       .text-secondary #{post.send_timestamp.toLocaleString("en-GB", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})}
+       a.btn.pt-1.pb-1(href='#')=post.sender
+     .col-md-8
+       .card-body
+         h5.card-title=post.header
+         #markdown_detailed_text.card-text=post.body
+  .modal(id='updatePostModal'+post.post_id tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          h5#groupsModalSmLabel.modal-title.h4= 'Update Post'+post.post_id
+          button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+        .modal-body
+          form.row.g-3(action='/post/update?post_id='+post.post_id method='post')
+            input.form-control(type='text' name='post_header' minLength="5" placeholder='Header' value=post.header)
+            textarea.form-control( name='post_body' rows='15')=post.body
+            input#hidden2(type='hidden' name='group_id' value=post.group_id)
+            button.btn.btn-outline-info.float-end(type='submit') Update
+    

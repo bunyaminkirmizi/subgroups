@@ -1,22 +1,24 @@
 {
-  "name": "app",
+  "name": "subgroups-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "description": "an app that allows users to create groups",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "npx nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "devstartapp": "nodemon index.js",
+    "start": "node index.js",
+    "test": "node tests/test.js"
   },
-  "author": "",
+  "author": "BUNYAMIN KIRMIZI",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
-    "dotenv": "^15.0.0",
-    "express": "^4.17.2",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
     "express-session": "^1.17.2",
-    "mariadb": "^2.5.5",
+    "multer": "^1.4.4",
     "nodemon": "^2.0.15",
-    "pug": "^3.0.2"
+    "pg": "^8.7.3",
+    "pug": "^3.0.2",
+    "simplemde": "^1.11.2"
   }
 }

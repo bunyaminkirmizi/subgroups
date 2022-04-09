@@ -1,38 +1,66 @@
-db = require("./connection");
+//remove vote if exists
+//downvote post
+//upvote post
 
-async function del(user_id, post_id) {
-  return await db.pool.query(
-    "DELETE FROM votes WHERE user_id = ? AND post_id = ?;",
-    [user_id, post_id]
-  );
-}
+const connect = require('./connect');
 
-async function upvote(user_id, post_id) {
-  await del(user_id, post_id);
-  return await db.pool.query(
-    "INSERT INTO votes (user_id, post_id, vote) VALUES(?, ?,  ?);",
-    [user_id, post_id, 1]
-  );
-}
+async function remove_old_vote_if_exists(user_id,post_id) {
+	const sqltext = 'delete from vote where user_id =$1 and post_id=$2;'
+	const values = [user_id,post_id]
+	try {
+		(await connect.pool.query(sqltext, values)).rows[0]
+		} catch (err) {
+		console.log(err.stack)
+		}
+	return null
+	}
 
-async function downvote(user_id, post_id) {
-  await del(user_id, post_id);
-  return await db.pool.query(
-    "INSERT INTO votes (user_id, post_id, vote) VALUES(?, ?, ?);",
-    [user_id, post_id, -1]
-  );
-}
+async function vote(user_id,post_id,type) {
+	await remove_old_vote_if_exists(user_id,post_id)
+	const sqltext = "insert into vote(user_id,post_id,vote_type) values($1,$2,$3)"
+	const values = [user_id,post_id,type]
+	connect.pool.query(sqltext,values,(err)=>console.log(err))
+	}
 
-async function votecount(post_id) {
-  console.log("votecount postid", post_id);
-  return await db.pool.query(
-    "SELECT SUM(vote) as sumvote from votes where post_id =?;",
-    [post_id]
-  );
+async function upvote(user_id,post_id) {
+	await vote(user_id,post_id,true)
 }
+async function downvote(user_id,post_id) {
+	await vote(user_id,post_id,false)
+}
+async function get_vote_type(user_id,post_id){
+	const sqltext = "select * from vote where user_id = $1 and post_id=$2"
+	const values = [user_id,post_id]
+	try {
+		const vote = (await connect.pool.query(sqltext, values)).rows[0]
+		if(vote){
+			return vote.vote_type
+		}else{
+			return undefined
+		} 
+		} catch (err) {
+		console.log(err.stack)
+		}
+	return null
+
+}
+async function get_vote_count(post_id){
+	const sqltext = "select ((select count(*) from vote where post_id=$1 and vote_type=True) - (select count(*) from vote where post_id=$1 and vote_type=False)) as votecount;"
+	const values = [post_id]
+
+	try {
+		console.log((await connect.pool.query(sqltext, values)).rows[0].votecount)
+		return (await connect.pool.query(sqltext, values)).rows[0].votecount
+		} catch (err) {
+		console.log(err.stack)
+		}
+	return null
+	}
 
 module.exports = {
-  upvote,
-  downvote,
-  votecount,
-};
+	downvote:downvote,
+	upvote:upvote,
+	get_vote_count:get_vote_count,
+	get_vote_type:get_vote_type,
+	remove_old_vote_if_exists:remove_old_vote_if_exists
+}

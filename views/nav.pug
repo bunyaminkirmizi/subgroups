@@ -1,0 +1,255 @@
+nav.navbar.sticky-top.navbar-expand-lg.navbar-light.bg-light.pt-1.pb-2
+  .container-fluid
+    a.navbar-brand(href='/')
+      strong alt
+      | gruplar
+      
+    button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
+      span.navbar-toggler-icon
+    //- if is_authenticated
+    if group
+      .btn-group
+        a.btn.btn-primary(href='/group/'+group.current.group_id)=group.current.group_name
+  
+        button.btn.btn-primary.dropdown-toggle.dropdown-toggle-split(type='button' data-bs-toggle='dropdown' aria-expanded='false')
+          span.visually-hidden Altgruplar
+        ul.dropdown-menu
+          each val in group.subs
+            li
+              a.dropdown-item(href='/group/'+val.group_id)=val.group_name
+            //- li
+            //-   a.dropdown-item(href='#') subgroup2
+            //- li
+            //-   a.dropdown-item(href='#') subgroup3
+          //- if group.parent
+          //-   li
+          //-     hr.dropdown-divider
+          //-   li
+          //-     a.dropdown-item(href='/group/'+group.parent.group_id)=group.parent.group_name
+      if group
+            a.btn.btn-primary.me-2.pb-2.ms-2(type='button' data-bs-toggle='modal' data-bs-target='#treeShowModal')
+                i.mt-1.fa-solid.fa-diagram-project
+    #navbarSupportedContent.collapse.navbar-collapse
+      ul.navbar-nav.me-auto.mb-lg-0
+        //- li.nav-item
+        //-   a.nav-link.active(aria-current='page' href='feed.html') feed
+      
+
+      form.d-flex.me-auto.m-0
+        input.form-control.me-2(type='search' placeholder='ara' aria-label='Search')
+        button.btn.btn-outline-success(type='submit') ara
+      .d-flex.ml-2.mb-0
+        if is_authenticated
+          if group
+            a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#groupsModalSm')
+                i.mt-1.fas.fa-plus
+            a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#postSendModal')
+              i.mt-1.fas.fa-pen            
+          .dropdown#dropdown_message_link.btn.btn-primary.me-2(href='messagebox' role='button' data-bs-toggle='dropdown' aria-expanded='false')
+              i.mt-1.fas.fa-envelope
+          ul.dropdown-menu.dropdown-menu-end(aria-labelledby='dropdown_message_link')
+            .card(style='width: 18rem;')
+              ul.list-group.list-group-flush
+                li.list-group-item.btn.btn-primary.btn-outline
+                  i.fas.fa-fw.fa-dot-circle
+                  | An item
+                li.list-group-item.btn.btn-primary.btn-outline
+                  i.fas.fa-fw.fa-dot-circle
+                  |  Anitem
+                li.list-group-item.btn.btn-primary.btn-outline
+                  i.fas.fa-fw.fa-dot-circle
+                  | An item
+                li.list-group-item.btn.btn-primary.btn-outline
+                  i.fas.fa-fw.fa-dot-circle
+                  | An item
+                li.list-group-item.btn.btn-primary.btn-outline
+                  i.fas.fa-fw.fa-dot-circle
+                  | An item
+              .container.mt-2.text-center
+                button.btn.btn-outline-primary.me-0
+                  i.fas.fa-fw.fa-angle-left
+                | 
+                button.btn.btn-primary 1
+                | 
+                button.btn.btn-outline-primary 2
+                | 
+                button.btn.btn-outline-primary 3
+                | 
+                button.btn.btn-outline-primary.me-0
+                  i.fas.fa-fw.fa-angle-right
+          .dropdown#dropdown_notifications_link.btn.btn-primary.me-2(href='messagebox' role='button' data-bs-toggle='dropdown' aria-expanded='false')
+            i.mt-1.fas.fa-bell
+          ul.dropdown-menu.dropdown-menu-end(aria-labelledby='dropdown_notifications_link')
+            .card(style='width: 18rem;')
+              ul.list-group.list-group-flush
+                li.list-group-item.btn.btn-primary.btn-outline
+                  i.fas.fa-fw.fa-dot-circle
+                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;An item
+                li.list-group-item.btn.btn-primary.btn-outline
+                  i.fas.fa-fw.fa-dot-circle
+                  |  Anitem
+                li.list-group-item.btn.btn-primary.btn-outline
+                  i.fas.fa-fw.fa-dot-circle
+                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;An item
+                li.list-group-item.btn.btn-primary.btn-outline
+                  i.fas.fa-fw.fa-dot-circle
+                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;An item
+                li.list-group-item.btn.btn-primary.btn-outline
+                  i.fas.fa-fw.fa-dot-circle
+                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;An item
+            .container.mt-2.text-center
+              button.btn.btn-outline-primary.me-0
+                i.fas.fa-fw.fa-angle-left
+              | 
+              button.btn.btn-primary 1
+              | 
+              button.btn.btn-outline-primary 2
+              | 
+              button.btn.btn-outline-primary 3
+              | 
+              button.btn.btn-outline-primary.me-0
+                i.fas.fa-fw.fa-angle-right
+          
+
+          .btn-group
+            button.btn.btn-primary.dropdown-toggle(type='button' data-bs-toggle='dropdown' data-bs-display='static' aria-expanded='false')=user.username
+            ul.dropdown-menu.dropdown-menu-lg-end
+              li
+                a.dropdown-item(href="/user/profile") kullanıcı sayfası
+              li
+                a.dropdown-item(href="/logout/") çıkış yap
+
+          //- .dropdown
+            //- button#dropdownMenuButton1.btn.btn-primary.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false')=user.username
+            //- ul.dropdown-menu.dropdown-menu-left(aria-labelledby='dropdownMenuButton1')
+
+
+
+          //- a.btn.btn-danger.dropdown-toggle(href="/logout/")=user.username
+        else
+          if title == "login"
+            a.btn.btn-primary.me-2(href='/login') Giriş Yap
+            a.btn.btn-outline-primary(href='/register') Kayıt Ol
+          else if title == "register"
+            a.btn.btn-outline-primary.me-2(href='/login') Giriş Yap
+            a.btn.btn-primary(href='/register') Kayıt Ol
+          else
+            a.btn.btn-outline-primary.me-2(href='/login') Giriş Yap
+            a.btn.btn-outline-primary(href='/register') Kayıt Ol
+
+if group
+  #groupsModalSm.modal(tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
+    .modal-dialog.modal-sm
+      .modal-content
+        .modal-header
+          h5#groupsModalSmLabel.modal-title.h4 Yeni grup ekle
+          button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+        .modal-body
+          form.row.g-3(action='/group/new/' method='post')
+            input.form-control(type='text' name='groupname' minLength="5" placeholder='Grup adı')
+            input#hidden2(type='hidden' name='parent_group_id' value=group.current.group_id)
+            button.btn.btn-outline-success.float-end(type='submit') Grup Ekle
+  #postSendModal.modal(tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
+    .modal-dialog.modal-lg
+      .modal-content
+        //- form(action='/upload/filename' method='post' enctype='multipart/form-data')
+        //- input(type='submit')
+        //-   label.form-label(for='formFileMultiple') Dosyalarınızı buradan yükleyebilirsiniz
+        //-     //- input#myFile(type='file' name="filename" multiple='')
+
+        .modal-header
+        
+          h5#groupsModalSmLabel.modal-title.h4 Gönderi gönder
+          button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+        .modal-body
+          //- form.row.g-3(action='/upload/filenameeessees' method='post')
+          input#myFile.form-control.md-3.mb-2(type='file' name='filename')
+          div#uploaded_files
+          form.row.g-3(action='/post/new/' method='post')
+            input.form-control(type='text' name='post_header' minLength="5" placeholder='Gönderi başlığı')
+            textarea#editor.form-control.mt-0( name='post_body' rows='15' placeholder="İçerik")
+            input#hidden2(type='hidden' name='group_id' value=group.current.group_id)
+            button.btn.btn-outline-success.float-end(type='submit') Gönder
+  
+  #treeShowModal.modal(tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
+    .modal-dialog.modal-lg
+      .modal-content
+      
+
+
+        .modal-header
+          h5#groupsModalSmLabel.modal-title.h4 xxxxx grubunun ağacı
+          button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+        .modal-body.text-center
+          figure
+            //- figcaption xxxx"xx
+            ul.tree.text-center
+              li
+                code html
+                ul
+                  li
+                    code head
+                    ul
+                      li
+                        code title
+                  li
+                    code body
+                    ul
+                      li
+                        code header
+                        ul
+                          li
+                            code h1
+                          li
+                            code p
+                      li
+                        code nav
+                        ul
+                          li
+                            code a
+                          li
+                            code a
+                          li
+                            code a
+                          li
+                            code a
+                      li
+                        code main
+                        ul
+                          li
+                            code h1
+                          li
+                            code article
+                            ul
+                              li
+                                code h2
+                              li
+                                code p
+                              li
+                                code p
+                      li
+                        code aside
+                        ul
+                          li
+                            code h2
+                          li
+                            code p
+                          li
+                            code p
+                            ul
+                              li
+                                code a
+                      li
+                        code footer
+                        ul
+                          li
+                            code nav
+                            ul
+                              li
+                                code a
+                              li
+                                code a
+                              li
+                                code a
+                              li
+                                code a

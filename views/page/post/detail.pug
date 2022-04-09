@@ -1,8 +1,0 @@
-extends ../../base.pug
-include ./thumbmixin.pug
-
-block content
-	if(post)
-		+thumbnail(post,false)
-	else
-		p=data

@@ -1,0 +1,9 @@
+DROP TABLE  comment;
+DROP TABLE  vote;
+DROP TABLE  group_participants;
+DROP TABLE  permissions;
+DROP TABLE  groups_hierarchy;
+DROP TABLE  posts;
+DROP TABLE  messages;
+DROP TABLE  groups;
+DROP TABLE  users;

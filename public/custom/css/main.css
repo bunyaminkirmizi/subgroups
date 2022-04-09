@@ -1,0 +1,40 @@
+.height-responsive {
+	height: 100% !important;
+}
+
+.bordered:hover {
+	border-color: black;
+}
+
+.button-to-the-top .btn {
+	z-index: 2;
+	position: relative;
+}
+
+.upvoted {
+	fill: green;
+}
+
+.downvoted {
+	fill: red;
+}
+
+.vote_buttons_no_focus:focus {
+	outline: none;
+	box-shadow: none;
+}
+
+/* body {
+	background: #000046;
+	/* fallback for old browsers */
+/* background: -webkit-linear-gradient(to right, #1CB5E0, #000046); */
+/* Chrome 10-25, Safari 5.1-6 */
+/* background: linear-gradient(to right, #1CB5E0, #000046); */
+/* W3C, IE 10+/Safari Edge, Firefox 16+, Chrome 26+, Opera 12+,  7+ */
+
+/* } */
+
+/* */
+/* .row {
+	http: //localhost:8080/
+} */

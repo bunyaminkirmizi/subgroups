@@ -1,0 +1,16 @@
+extends ../base.pug
+
+block content
+    .row
+        .col-md-4.offset-md-4
+            .login-form.bg-light.mt-4.p-4
+                form.row.g-3(action='' method='post')
+                    input.form-control(type='text' minLength="5" maxLength="15" name='username' placeholder='Kullanıcı adı')
+                    input.form-control(type='email' name='email' placeholder='E-posta')
+                    input.form-control(type='password' minLength="8" maxLength="15" name='password' placeholder='Parola')
+                    input.form-control(type='password' minLength="8" name='passwordagain' placeholder='Parolanızı yeniden giriniz')
+                    button.btn.btn-outline-success.float-end(type='submit') Kayıt ol
+                hr.mt-4
+                p.text-center.mb-0
+                | Zaten bir hesabınız var mı? 
+                a(href='/login/') Giriş yapın
