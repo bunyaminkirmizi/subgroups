@@ -1,5 +1,3 @@
-
-let a ={}
 function change_vote(post,count) {
 	document.getElementById("vc"+post).innerHTML = count
 	
@@ -36,27 +34,42 @@ function giveupvote(post) {
 function givedownvote(post) {
 	givevote(post,'down')
 }
-
+function addphotototextarea (nameofphoto,url) {
+	console.log(url)
+	simplemde.value(simplemde.value() + `![${nameofphoto}](${url})`)
+}
 async function uploadfile() {
 	let input = document.getElementById('myFile')
 	let data = new FormData()
 	data.append('filename', input.files[0])
 
+	if(input.files[0].size > 1097152){
+		alert("File is too big!");
+		console.log("Big file so can't upload")
+		input.value = "";
+		return
+	 };
 	let url = '/upload/'+input.files[0].name;
 	try {
 		let response = await fetch(url, {
 			method: 'POST',
 			body: data
+			
 			})
 		const response_as_json = await response.json();
-		let files = document.getElementById("uploaded_files")
-		var text = document.createTextNode(response_as_json['filepath']);
+		let showfiles = document.getElementById("uploaded_files")
+		function newtext(name,url_of_photo) {
+			return `<div class="row mb-2">
+    <div class="col-sm">${name}</div>
+    <div class="col-sm"><button onclick="addphotototextarea('${name}','${url_of_photo}')" class="btn btn-primary">bu resmi ekle</button></div>
+  				</div>`
+		}
+		showfiles.innerHTML = showfiles.innerHTML + newtext(response_as_json.filename,response_as_json.filepath)
 
-		files.appendChild(text)
 		console.log("response as json: ",response_as_json);
 		return response;
 	} catch (e) {
-		console.log("eeeeeeeeeeeeeer",e.message)
+		console.log("ERROR=>",e.message)
 
 		return e.message;
 }

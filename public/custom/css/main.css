@@ -24,6 +24,53 @@
 	box-shadow: none;
 }
 
+a:link {
+	text-decoration: none;
+}
+
+a:visited {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+a:active {
+	text-decoration: none;
+}
+
+.navbreadcrumb li {
+	display: inline-block;
+}
+
+.navbreadcrumb li+li:before {
+	content: '\f061';
+	display: inline-block;
+	font-family: 'fontAwesome';
+	padding: 0 10px;
+}
+
+.overflowhidden {
+	overflow: hidden;
+}
+
+.fixedcardsize {
+	height: 120px;
+}
+
+.fixedcardsizepop {
+	height: 300px;
+}
+
+.fixedcardsize400 {
+	height: 300px;
+}
+
+/* body {
+	background: linear-gradient(to bottom, #0066ff 0%, #993366 100%);
+} */
+
 /* body {
 	background: #000046;
 	/* fallback for old browsers */

@@ -2,14 +2,16 @@ extends ../base.pug
 
 block content
   .card.mb-3.text-center
-   nav.text-center(style="--bs-breadcrumb-divider: '>';" aria-label='breadcrumb')
-     ol.breadcrumb.ms-1.mt-1.mb-1
-       li.breadcrumb-item
-         a(href='#') Anasayfa
-       li.breadcrumb-item.active(aria-current='page') Dıger
+   
+      if group
+        nav.navbreadcrumb.text-center(style="--bs-breadcrumb-divider: '"+'/'+"';" aria-label='breadcrumb')
+          ol.breadcrumb.ms-1.mt-1.mb-1
+            each parent in group.parents
+              li.breadcrumb-item
+                a(href=parent.id)=parent.name
 
   each post in posts
-   .card.mb-3.bordered.button-to-the-top
+   .card.mb-3.bordered.button-to-the-top.overflowhidden
     .row.g-0
       .col-md-2.text-center.mt-2
         if is_authenticated
@@ -42,15 +44,18 @@ block content
            |  
            a.btn.btn-outline-info.mt-2(type='button' data-bs-toggle='modal' data-bs-target='#updatePostModal'+post.post_id)
              i.fa.fa-edit
-           //- (href="/post/update?post_id="+post.post_id)
-           
+               
         .text-secondary #{post.send_timestamp.toLocaleString("en-GB", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})}
         a.btn.pt-1.pb-1(href='#')=post.sender
-      .col-md-8
-        a.stretched-link(href='/post/detail?post_id='+post.post_id)
-        .card-body
-          h5.card-title=post.header
-          p.card-text=post.body
+
+      .col-md-10
+          a.stretched-link(href='/post/detail?post_id='+post.post_id)
+          .card-body.fixedcardsize
+            h5.card-title=post.header
+            p.card-text.markdown_detailed_render=post.body
+      //- .col-md-2.align-middle 
+      //-     img.align-middle.img-fluid.rounded-end.mt-2(src='/images/2ed316af9643d35456022868f80fbbd4', alt='...', width='200px' height='500px')
+      
    .modal(id='updatePostModal'+post.post_id tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
      .modal-dialog.modal-lg
        .modal-content
@@ -63,4 +68,5 @@ block content
              textarea.form-control( name='post_body' rows='15')=post.body
              input#hidden2(type='hidden' name='group_id' value=post.group_id)
              button.btn.btn-outline-info.float-end(type='submit') Update
+             
      

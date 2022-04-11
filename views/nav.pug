@@ -17,24 +17,13 @@ nav.navbar.sticky-top.navbar-expand-lg.navbar-light.bg-light.pt-1.pb-2
           each val in group.subs
             li
               a.dropdown-item(href='/group/'+val.group_id)=val.group_name
-            //- li
-            //-   a.dropdown-item(href='#') subgroup2
-            //- li
-            //-   a.dropdown-item(href='#') subgroup3
-          //- if group.parent
-          //-   li
-          //-     hr.dropdown-divider
-          //-   li
-          //-     a.dropdown-item(href='/group/'+group.parent.group_id)=group.parent.group_name
+
       if group
             a.btn.btn-primary.me-2.pb-2.ms-2(type='button' data-bs-toggle='modal' data-bs-target='#treeShowModal')
                 i.mt-1.fa-solid.fa-diagram-project
     #navbarSupportedContent.collapse.navbar-collapse
       ul.navbar-nav.me-auto.mb-lg-0
-        //- li.nav-item
-        //-   a.nav-link.active(aria-current='page' href='feed.html') feed
       
-
       form.d-flex.me-auto.m-0
         input.form-control.me-2(type='search' placeholder='ara' aria-label='Search')
         button.btn.btn-outline-success(type='submit') ara
@@ -163,8 +152,8 @@ if group
           button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
         .modal-body
           //- form.row.g-3(action='/upload/filenameeessees' method='post')
-          input#myFile.form-control.md-3.mb-2(type='file' name='filename')
-          div#uploaded_files
+          input#myFile.form-control.md-3.mb-2(type='file' accept="image/*" name='filename')
+          div#uploaded_files.container.text-center
           form#sendpostform.row.g-3(action='/post/new/' method='post')
             input.form-control(type='text' name='post_header' minLength="5" placeholder='Gönderi başlığı')
             textarea#editor.form-control.mt-0( name='post_body' rows='15' placeholder="İçerik")
@@ -174,82 +163,25 @@ if group
   #treeShowModal.modal(tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
     .modal-dialog.modal-lg
       .modal-content
-      
-
-
         .modal-header
-          h5#groupsModalSmLabel.modal-title.h4 xxxxx grubunun ağacı
+          h5#groupsModalSmLabel.modal-title.h4 '#{group.current.group_name}' grubunun ağacı
           button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
         .modal-body.text-center
           figure
             //- figcaption xxxx"xx
             ul.tree.text-center
-              li
-                code html
-                ul
-                  li
-                    code head
-                    ul
-                      li
-                        code title
-                  li
-                    code body
-                    ul
-                      li
-                        code header
-                        ul
-                          li
-                            code h1
-                          li
-                            code p
-                      li
-                        code nav
-                        ul
-                          li
-                            code a
-                          li
-                            code a
-                          li
-                            code a
-                          li
-                            code a
-                      li
-                        code main
-                        ul
-                          li
-                            code h1
-                          li
-                            code article
-                            ul
-                              li
-                                code h2
-                              li
-                                code p
-                              li
-                                code p
-                      li
-                        code aside
-                        ul
-                          li
-                            code h2
-                          li
-                            code p
-                          li
-                            code p
-                            ul
-                              li
-                                code a
-                      li
-                        code footer
-                        ul
-                          li
-                            code nav
-                            ul
-                              li
-                                code a
-                              li
-                                code a
-                              li
-                                code a
-                              li
-                                code a
+              li='test'
+                ul='test1'
+                  
+            if tree
+              script.
+                //- burada tree yi olustur recursive tree treversal yaparak
+                var tree = !{JSON.stringify(tree)}
+                console.log(tree)
+                function recursive_tree_traversal(){
+                  console.log("test")
+                  const codelement = document.createElement('code')
+                  codelement.innerHTML = 'title'
+                  const element = document.createElement('li');
+                }
+            

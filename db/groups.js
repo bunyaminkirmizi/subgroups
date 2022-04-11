@@ -8,6 +8,8 @@ get parent group
 */
 
 const connect = require('./connect');
+const { TreeNode } = require('./tree');
+// const tree = require('./tree');
 
 async function create_group(user_id,group_name) {
 	const sqltext="INSERT INTO groups(user_id,group_name) values($1,$2) RETURNING group_id"
@@ -23,6 +25,26 @@ async function create_group(user_id,group_name) {
 		return null
 	}
 	return added_group_id;
+	}
+
+async function recursive_group_traverse(group_id,tree) {
+	console.log(group_id)
+	let subs = []
+	try{
+		subs = await get_subs(group_id);
+	}catch(e){
+		return;
+	}
+	if(subs.length==0){
+		return;
+	}
+	for (let index = 0; index < subs.length; index++) {
+		const element = subs[index];
+		let newchild = new TreeNode(element.group_id,element.group_name)
+		tree.add_child(newchild)
+		await recursive_group_traverse(element.group_id,newchild) 
+	}
+	return tree;
 	}
 
 async function create_group_under_parent(user_id,group_name,parent_group_id) {
@@ -94,17 +116,24 @@ async function get_subs(group_id) {
 	return groups;
 	}
 
-async function get_parent(group_id) {
-	var user = null
-	const sqltext = 'select parent_group from groups_hierarchy where group_id=$1'
+async function get_parents(group_id,parents) {
+	const sqltext = 'select parent_group_id from groups_hierarchy where group_id=$1'
 	const values = [group_id]
+	console.log(parents)
 	try {
-		user = (await connect.pool.query(sqltext, values)).rows[0]
+		const parent_id = (await connect.pool.query(sqltext, values)).rows[0].parent_group_id
+		if(parent_id == 1){
+			parents.push({name: (await get_group(parent_id)).group_name,id:parent_id})
+			return parents;
+		}
+
+		parents.push({name: (await get_group(parent_id)).group_name,id:parent_id})
+		return get_parents(parent_id,parents)
+
 	  } catch (err) {
-		console.log(err.stack)
+		return parents;
+		
 	  }
-	  console.log(user,"got from database")
-	return user;
 	}
 function make_group_public(user_id,group_id) {
 	return null
@@ -121,5 +150,7 @@ module.exports = {
 	make_child:make_child,
 	create_group_under_parent:create_group_under_parent,
 	get_subs:get_subs,
-	get_group:get_group
+	get_group:get_group,
+	get_parents:get_parents,
+	recursive_group_traverse:recursive_group_traverse
 }

@@ -2,8 +2,8 @@ const path = require('path')
 const express = require('express')
 const session = require('express-session')
 const multer  = require('multer')
-const upload = multer({ dest: './public/images/' })
 
+const upload = multer({ dest: './public/images/',limits: { fileSize: 1000000*90 } })
 require("dotenv").config();
 const app = express()
 app.use(session({
@@ -16,17 +16,18 @@ app.use(session({
 }))
 
 app.post('/upload/:filename', upload.single('filename'), (req, res) => {
-
-  // console.log(req.file)
+  
   let filepath = null
   if(req.file){
+    console.log("file uploaded"+req.file.filename)
     filepath = "/images/"+req.file.filename
+  }else{
+    console.log("req.file didn't worked");
   }
   res.send({
     "filename": req.params.filename,
     "filepath": filepath
   })
-
 })
 
 const user = require("./router/user");
@@ -40,6 +41,7 @@ const port = process.env.PORT
 const auth = require('./db/auth');
 const groups = require('./db/groups');
 const posts = require('./db/posts')
+const { TreeNode } = require('./db/tree')
 
 app.use(express.urlencoded({ extended: true })); //Used fore parsing body elements
 app.set('trust proxy', 1) // trust first proxy
@@ -52,11 +54,7 @@ app.get('/', async (req, res) => {
     user:req.session.user,
     is_authenticated:  auth.is_authanticated(req.session),
     
-    group:{
-      current: await groups.get_group(15),
-      parent:{"group_id":"2","group_name":"prent"},
-      subs: await groups.get_subs((await groups.get_group(15)).group_id)
-      }})
+   })
     }
   )
   
@@ -73,18 +71,22 @@ app.get('/user/profile',auth.authentication_required, async (req, res) => {
 app.get('/group/:group_id', async (req, res) => {
   const group_id = req.params.group_id
   const current_group = await groups.get_group(group_id)
-  
+  let tree = new TreeNode()
+	await groups.recursive_group_traverse(1,tree)
   if(current_group != undefined){
     const g_dropdown = {
       current:current_group,
       parent:{"group_id":"2","group_name":"parent"},
-      subs:await groups.get_subs((await groups.get_group(group_id)).group_id)}
+      subs:await groups.get_subs((await groups.get_group(group_id)).group_id),
+      parents: (await groups.get_parents(group_id,[])).reverse()
+    }
     res.render('pages/group', {
       title: 'sub | '+ g_dropdown.current.group_name,
       user:req.session.user,
       is_authenticated:  auth.is_authanticated(req.session),
       group:g_dropdown,
-      posts:await posts.get_post_by_group(group_id,req.session.user)
+      posts:await posts.get_post_by_group(group_id,req.session.user),
+      tree:tree
     })
     return;
     }

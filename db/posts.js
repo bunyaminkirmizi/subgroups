@@ -63,7 +63,6 @@ async function get_post(post_id) {
 		row['sender'] = (await users.get_user_by_id(row.user_id)).username
 
 		}
-
 		return row
 		} catch (err) {
 		console.log(err.stack)
@@ -71,6 +70,28 @@ async function get_post(post_id) {
 	return null
 	}
 
+async function get_post_with_user_given_vote(post_id,authenticated_user) {
+	const sqltext = 'SELECT * FROM posts WHERE post_id =$1'
+	const values = [post_id]
+
+	try {
+		let row = (await connect.pool.query(sqltext, values)).rows[0]
+		if(row !=undefined){
+			row['votecount'] = await votes.get_vote_count(post_id)
+		
+		row['sender'] = (await users.get_user_by_id(row.user_id)).username
+
+		}
+		if (authenticated_user){
+			row['user_given_vote'] = await votes.get_vote_type(authenticated_user.user_id, row.post_id)
+
+		}
+		return row
+		} catch (err) {
+		console.log(err.stack)
+		}
+	return null
+	}
 
 async function get_post_for_thumbnail(post_id) {
 	const sqltext = 'SELECT * FROM posts WHERE post_id =$1'
@@ -135,7 +156,8 @@ module.exports = {
 	get_post:get_post,
 	get_post_by_group:get_post_by_group,
 	upvote:upvote,
-	downvote:downvote
+	downvote:downvote,
+	get_post_with_user_given_vote:get_post_with_user_given_vote
 
 
 }

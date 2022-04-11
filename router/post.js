@@ -28,14 +28,14 @@ router.post('/new/',auth.authentication_required, async (req, res) => {
 	const post_body = req.body.post_body
 	const post_header = req.body.post_header
 	const user_id = req.session.user.user_id
-	console.log(await posts.add_post(user_id,group_id,post_header,post_body))
+	await posts.add_post(user_id,group_id,post_header,post_body)
 	res.redirect('/group/'+group_id)
   
   })
 
 router.get('/detail', async (req, res) => {
 	const post_id = req.query.post_id
-	const post = await posts.get_post(post_id)
+	const post = await posts.get_post_with_user_given_vote(post_id,req.session.user)
 	const group_id = post.group_id
 	const current_group = await groups.get_group(group_id)
 	
@@ -71,9 +71,7 @@ router.post('/update/',authentication_required,ownership_required, async (req, r
 	const post_body = req.body.post_body
 	const post_header = req.body.post_header
 	const post_id = req.query.post_id
-	console.log('fafafafafafafafafa');
 	await posts.update_post(post_id,post_header,post_body)
-	console.log("testsetesats")
 	res.redirect('/group/'+ group_id)
 })
 
