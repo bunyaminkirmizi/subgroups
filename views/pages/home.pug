@@ -20,7 +20,7 @@ block content
         h5.card-header='🔥 Popüler gruplar'
         .card-body
           each grp in statistics.populargroups
-            a(href='/group/'+grp.id)=grp.name
+            a(href='/group/'+grp.group_id)=grp.group_name
             br
     .col-md-6
       .card

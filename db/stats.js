@@ -39,7 +39,7 @@ async function mostvotedpost(){
 	order by count desc limit 1;`;
 	try {
 		const res = (await connect.run_query_select_first_row(SQLtext,[]))
-		console.log(res)
+		// console.log(res)
 		return res;
 	}catch (err) {
 		console.error(err.stack)
@@ -50,8 +50,14 @@ function activegroup(){
 	return 'dddactivegroupddd';
 }
 
-function populargroups(){
-	return [{id:4,name:'populargroup1'},{id:4,name:'populargroup1'},{id:5,name:'populargroup5'},{id:6,name:'populargroup5'},{id:7,name:'populargroup4'}];
+async function populargroups(){
+	const SQLtext = `
+	SELECT groups.group_id,groups.group_name,count(lastsevendaysposts.post_id)
+	FROM groups
+	RIGHT JOIN (select * from posts WHERE send_timestamp > current_date - interval '7 days') as lastsevendaysposts
+	ON lastsevendaysposts.group_id = groups.group_id group by groups.group_id order by count desc limit 5;`
+	console.log(await connect.run_query_select_rows(SQLtext,[]))
+	return await connect.run_query_select_rows(SQLtext,[]);
 }
 
 async function mostupvotedposts(){
