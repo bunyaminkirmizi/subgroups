@@ -36,6 +36,9 @@ router.post('/new/',auth.authentication_required, async (req, res) => {
 router.get('/detail', async (req, res) => {
 	const post_id = req.query.post_id
 	const post = await posts.get_post_with_user_given_vote(post_id,req.session.user)
+	if(post == undefined){
+		 res.redirect('/404');
+		 return;}
 	const group_id = post.group_id
 	const current_group = await groups.get_group(group_id)
 	

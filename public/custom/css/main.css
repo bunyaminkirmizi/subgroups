@@ -59,12 +59,12 @@ a:active {
 	height: 120px;
 }
 
-.fixedcardsizepop {
-	height: 300px;
+.fixedcardsizefrontpagerow {
+	height: 250px;
 }
 
 .fixedcardsize400 {
-	height: 300px;
+	height: 320px;
 }
 
 /* body {

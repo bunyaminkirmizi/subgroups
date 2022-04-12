@@ -1,5 +1,4 @@
-const { redirect } = require('express/lib/response');
-const connect = require('./connect');
+// const connect = require('./connect');
 const bcrypt = require("bcrypt");
 const users = require("./users");
 const top_notifications = require("../top_notifications");

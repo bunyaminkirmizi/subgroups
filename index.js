@@ -42,6 +42,7 @@ const auth = require('./db/auth');
 const groups = require('./db/groups');
 const posts = require('./db/posts')
 const { TreeNode } = require('./db/tree')
+const stats = require('./db/stats')
 
 app.use(express.urlencoded({ extended: true })); //Used fore parsing body elements
 app.set('trust proxy', 1) // trust first proxy
@@ -49,11 +50,12 @@ app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', async (req, res) => {
+  console.log("entered homepage")
   res.render('pages/home', {
     title: 'subgroups',
     user:req.session.user,
-    is_authenticated:  auth.is_authanticated(req.session),
-    
+    is_authenticated:  auth.is_authanticated(req.session)
+    ,statistics: await stats.lastweek()
    })
     }
   )

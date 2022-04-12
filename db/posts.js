@@ -75,7 +75,9 @@ async function get_post_with_user_given_vote(post_id,authenticated_user) {
 	const values = [post_id]
 
 	try {
-		let row = (await connect.pool.query(sqltext, values)).rows[0]
+		const res = (await connect.pool.query(sqltext, values))
+		if(res == undefined) return undefined;
+		let row = res.rows[0]
 		if(row !=undefined){
 			row['votecount'] = await votes.get_vote_count(post_id)
 		

@@ -12,7 +12,7 @@ const { TreeNode } = require('./tree');
 // const tree = require('./tree');
 
 async function create_group(user_id,group_name) {
-	const sqltext="INSERT INTO groups(user_id,group_name) values($1,$2) RETURNING group_id"
+	const sqltext="INSERT INTO groups(user_id,group_name,group_create_timestamp) values($1,$2,current_timestamp) RETURNING group_id"
 	const values = [user_id, group_name]
 	let added_group_id = null
 	try {
