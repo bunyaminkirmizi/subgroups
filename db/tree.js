@@ -17,7 +17,7 @@ class Tree{
 		this.descendants = [];
 	  }
 }
-
+	
 module.exports = {
 	TreeNode:TreeNode,
 	Tree:Tree

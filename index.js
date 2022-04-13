@@ -50,12 +50,16 @@ app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', async (req, res) => {
+
   console.log("entered homepage")
   res.render('pages/home', {
     title: 'subgroups',
     user:req.session.user,
     is_authenticated:  auth.is_authanticated(req.session)
     ,statistics: await stats.lastweek()
+    // filter:{
+    //   type:"up"
+    // }
    })
     }
   )
@@ -74,7 +78,7 @@ app.get('/group/:group_id', async (req, res) => {
   const group_id = req.params.group_id
   const current_group = await groups.get_group(group_id)
   let tree = new TreeNode()
-	await groups.recursive_group_traverse(1,tree)
+	await groups.recursive_group_traverse(group_id,tree)
   if(current_group != undefined){
     const g_dropdown = {
       current:current_group,
@@ -87,8 +91,9 @@ app.get('/group/:group_id', async (req, res) => {
       user:req.session.user,
       is_authenticated:  auth.is_authanticated(req.session),
       group:g_dropdown,
-      posts:await posts.get_post_by_group(group_id,req.session.user),
-      tree:tree
+      posts:await posts.get_post_by_group(group_id,req.session.user,req.query.filter),
+      tree:tree,
+      filter: {name: req.query.filtername}
     })
     return;
     }

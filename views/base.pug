@@ -5,7 +5,9 @@ html(lang="en")
     link(rel="stylesheet", href="/fontawesome/css/all.min.css")
     link(rel="stylesheet", href="/custom/css/main.css")
     link(rel="stylesheet", href="/custom/css/tree.css")
+    
     link(rel='stylesheet' href='https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css')
+    
     script(src='https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js')
     script(src='https://cdn.jsdelivr.net/npm/marked/marked.min.js')
     
@@ -22,7 +24,11 @@ html(lang="en")
           p=message.body
         div.container.mt-2
       block content
-    
+    //- footer.footer.mt-auto.py-3.bg-light
+    //-   .container
+    //-     center
+    //-       span.text-muted footer text
+
 
     //- script(src='/bootstrap/js/jquery-3.6.0.slim.min')
     //- script(src='/bootstrap/js/popper.min.js')
@@ -31,3 +37,4 @@ html(lang="en")
     script(src='/bootstrap/js/bootstrap.bundle.min.js')
     script(src='/custom/js/markdown.js')
     script(src='/custom/js/requests.js')
+    

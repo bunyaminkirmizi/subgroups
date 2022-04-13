@@ -1,14 +1,16 @@
 extends ../base.pug
 
 block content
-  .card.mb-3.text-center
-   
-      if group
-        nav.navbreadcrumb.text-center(style="--bs-breadcrumb-divider: '"+'/'+"';" aria-label='breadcrumb')
-          ol.breadcrumb.ms-1.mt-1.mb-1
-            each parent in group.parents
-              li.breadcrumb-item
-                a(href=parent.id)=parent.name
+
+  if group
+    .card.mb-3.text-center
+      nav.navbreadcrumb.text-center(style="--bs-breadcrumb-divider: '"+'/'+"';" aria-label='breadcrumb')
+        ol.breadcrumb.ms-1.mt-1.mb-1
+          each parent in group.parents
+            li.breadcrumb-item
+              a(href=parent.id)=parent.name
+    
+    
 
   each post in posts
    .card.mb-3.bordered.button-to-the-top.overflowhidden

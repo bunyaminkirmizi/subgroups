@@ -19,19 +19,47 @@ nav.navbar.sticky-top.navbar-expand-lg.navbar-light.bg-light.pt-1.pb-2
               a.dropdown-item(href='/group/'+val.group_id)=val.group_name
 
       if group
-            a.btn.btn-primary.me-2.pb-2.ms-2(type='button' data-bs-toggle='modal' data-bs-target='#treeShowModal')
-                i.mt-1.fa-solid.fa-diagram-project
+        a.btn.btn-primary.me-2.ms-2(type='button' data-bs-toggle='modal' data-bs-target='#treeShowModal')
+            i.mt-1.fa-solid.fa-diagram-project
+            | 
     #navbarSupportedContent.collapse.navbar-collapse
       ul.navbar-nav.me-auto.mb-lg-0
       
       form.d-flex.me-auto.m-0
         input.form-control.me-2(type='search' placeholder='ara' aria-label='Search')
+        
         button.btn.btn-outline-success(type='submit') ara
+        if group
+            .dropdown.ms-2
+              if filter
+                if filter.name
+                  button#filterdropdown.btn.btn-success.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false')
+                    i.mt-1.fas.fa-filter
+                    |  #{filter.name}
+
+                else
+                  button#filterdropdown.btn.btn-outline-success.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false')
+                      i.mt-1.fas.fa-filter
+                      | 
+
+              ul.dropdown-menu(aria-labelledby='filterdropdown')
+                li
+                  a.dropdown-item(href="?filter=up&filtername=Yukarı Oylananlar") Yukarı oylananlar
+                li
+                  a.dropdown-item(href="?filter=down&filtername=Aşağı oylananlar")  Aşağı oylananlar
+                li
+                  a.dropdown-item(href="?filter=newest&filtername=En yeniler") En yeniler
+                li
+                  a.dropdown-item(href="?filter=oldest&filtername=En eskiler") En eskiler
+                li
+                  a.dropdown-item(href="?filter=clear") Filtreyi Temizle
       .d-flex.ml-2.mb-0
         if is_authenticated
+          a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#groupsModalSm')
+            i.mt-1.fas.fa-plus
           if group
-            a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#groupsModalSm')
-                i.mt-1.fas.fa-plus
+
+
             a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#postSendModal')
               i.mt-1.fas.fa-pen            
           .dropdown#dropdown_message_link.btn.btn-primary.me-2(href='messagebox' role='button' data-bs-toggle='dropdown' aria-expanded='false')
@@ -126,18 +154,22 @@ nav.navbar.sticky-top.navbar-expand-lg.navbar-light.bg-light.pt-1.pb-2
             a.btn.btn-outline-primary.me-2(href='/login') Giriş Yap
             a.btn.btn-outline-primary(href='/register') Kayıt Ol
 
-if group
-  #groupsModalSm.modal(tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
-    .modal-dialog.modal-sm
-      .modal-content
-        .modal-header
-          h5#groupsModalSmLabel.modal-title.h4 Yeni grup ekle
-          button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
-        .modal-body
-          form#sendgroupform.row.g-3(action='/group/new/' method='post')
-            input.form-control(type='text' name='groupname' minLength="5" placeholder='Grup adı')
+
+#groupsModalSm.modal(tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
+  .modal-dialog.modal-sm
+    .modal-content
+      .modal-header
+        h5#groupsModalSmLabel.modal-title.h4 Yeni grup ekle
+        button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+      .modal-body
+        form#sendgroupform.row.g-3(action='/group/new/' method='post')
+          input.form-control(type='text' name='groupname' minLength="5" placeholder='Grup adı')
+          if group
             input#hidden2(type='hidden' name='parent_group_id' value=group.current.group_id)
-            button.btn.btn-outline-success.float-end(type='submit') Grup Ekle
+          else
+            input#hidden2(type='hidden' name='parent_group_id' value='1')
+          button.btn.btn-outline-success.float-end(type='submit') Grup Ekle
+if group
   #postSendModal.modal(tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
     .modal-dialog.modal-lg
       .modal-content
@@ -166,12 +198,10 @@ if group
         .modal-header
           h5#groupsModalSmLabel.modal-title.h4 '#{group.current.group_name}' grubunun ağacı
           button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
-        .modal-body.text-center
+        .modal-body.text-center.overflow-auto
           figure
-            //- figcaption xxxx"xx
-            ul.tree.text-center
-              li='test'
-                ul='test1'
+            figcaption '#{group.current.group_name}' grubunun ağacı
+            ul#rootnodetree.tree
                   
             if tree
               script.

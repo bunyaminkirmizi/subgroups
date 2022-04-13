@@ -43,8 +43,8 @@ async function uploadfile() {
 	let data = new FormData()
 	data.append('filename', input.files[0])
 
-	if(input.files[0].size > 1097152){
-		alert("File is too big!");
+	if(input.files[0].size > 10097152){
+		alert("Dosya boyutu büyük!");
 		console.log("Big file so can't upload")
 		input.value = "";
 		return
@@ -76,10 +76,67 @@ async function uploadfile() {
 
 }
 
-
-document.getElementById("myFile").addEventListener('change',() => {
+var myfileee=document.getElementById("myFile")
+if (myfileee){
+	try{
+		myfileee.addEventListener('change',() => {
 	
-	console.log(document.getElementById("myFile").files[0])
-	uploadfile()
-})
+			console.log(document.getElementById("myFile").files[0])
+			uploadfile()
+		})
+	}catch (e){
+		console.log(e);
+	}
+	
+}
+
+
+function recursive_group_traverse(tree,nextnode) {
+	if(tree== undefined){
+		console.log("undefined tree")
+	}
+	if(tree.descendants == undefined){
+		return;
+	}
+	console.log(tree.id);
+	let subs = tree.descendants;
+    console.log("subs",subs)
+	
+	
+	const li = document.createElement('li');
+	const code = document.createElement('code')
+	const stretchedlink = document.createElement('a')
+	stretchedlink.classList.add('stretched-link')
+	stretchedlink.href = '/group/'+tree.id
+	// buttonlink.href='/group/'+tree.id
+	// buttonlink.innerHTML=tree.name
+	// code.appendChild(buttonlink)
+
+	code.innerHTML= tree.name
+	li.appendChild(code)
+	code.appendChild(stretchedlink)
+	nextnode.appendChild(li)
+	const htmlelement = document.createElement('ul');
+	li.appendChild(htmlelement)
+	for (let index = 0; index < subs.length; index++) {
+		const element = subs[index];
+		console.log("element",element);
+		
+		
+		recursive_group_traverse(element,htmlelement) ;
+	}
+	console.log("id=>",tree.id);
+	console.log("name=>",tree.name);
+	return tree;
+	}
+
+var rootnode = document.getElementById("rootnodetree")
+try{
+	if(tree){
+		recursive_group_traverse(tree,rootnode)
+	}
+}catch(e){
+	console.log(e)
+}
+
 

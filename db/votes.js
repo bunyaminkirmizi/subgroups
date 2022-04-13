@@ -17,7 +17,7 @@ async function remove_old_vote_if_exists(user_id,post_id) {
 
 async function vote(user_id,post_id,type) {
 	await remove_old_vote_if_exists(user_id,post_id)
-	const sqltext = "insert into vote(user_id,post_id,vote_type) values($1,$2,$3)"
+	const sqltext = "insert into vote(user_id,post_id,vote_type,vote_timestamp) values($1,$2,$3,current_timestamp)"
 	const values = [user_id,post_id,type]
 	connect.pool.query(sqltext,values,(err)=>console.log(err))
 	}

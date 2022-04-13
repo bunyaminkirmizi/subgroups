@@ -44,6 +44,8 @@ async function recursive_group_traverse(group_id,tree) {
 		tree.add_child(newchild)
 		await recursive_group_traverse(element.group_id,newchild) 
 	}
+	tree.id = group_id
+	tree.name = (await get_group(group_id)).group_name
 	return tree;
 	}
 

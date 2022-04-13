@@ -106,11 +106,43 @@ async function get_post_for_thumbnail(post_id) {
 	return null
 	}
 
-async function get_post_by_group(group_id,authenticated_user) {
-	const sqltext = 'SELECT * FROM posts WHERE group_id =$1 order by send_timestamp desc'
+async function get_post_by_group(group_id,authenticated_user,filter) {
+	let sqltext = 'SELECT * FROM posts WHERE group_id =$1'
+	if(filter){
+		if (filter == "up"){
+			sqltext =`SELECT 
+			groupposts.post_id,groupposts.user_id,groupposts.group_id,groupposts.header,groupposts.body,groupposts.send_timestamp,COALESCE(sum(CASE WHEN vote.vote_type THEN 1 ELSE -1 END),-1)
+			FROM 
+			(select * from posts where group_id=$1) as groupposts
+			LEFT JOIN vote
+			ON groupposts.post_id = vote.post_id
+			GROUP BY groupposts.post_id,groupposts.user_id,groupposts.group_id,groupposts.header,groupposts.body,groupposts.send_timestamp
+			order by coalesce desc;`
+		}
+		
+		if (filter == "down"){
+			sqltext =`SELECT 
+			groupposts.post_id,groupposts.user_id,groupposts.group_id,groupposts.header,groupposts.body,groupposts.send_timestamp,COALESCE(sum(CASE WHEN vote.vote_type THEN 1 ELSE -1 END),-1)
+			FROM 
+			(select * from posts where group_id=$1) as groupposts
+			LEFT JOIN vote
+			ON groupposts.post_id = vote.post_id
+			GROUP BY groupposts.post_id,groupposts.user_id,groupposts.group_id,groupposts.header,groupposts.body,groupposts.send_timestamp
+			order by coalesce asc;`
+		}
+		if (filter == "newest"){
+			sqltext += " order by send_timestamp desc"
+		}
+		if (filter == "oldest"){
+			sqltext += " order by send_timestamp asc "
+		}
+	}else{
+		sqltext += " order by send_timestamp desc"
+	}
 	const values = [group_id]
 	try {
 		const group_posts = (await connect.pool.query(sqltext, values)).rows
+		// console.log("rowsss=>",group_posts)
 		for (let index = 0; index < group_posts.length; index++) {
 			let element = group_posts[index] 
 			element['votecount'] = await votes.get_vote_count(element.post_id);
@@ -163,3 +195,26 @@ module.exports = {
 
 
 }
+
+
+/**
+ *
+ * SELECT 
+   posts.post_id, 
+   count(upvotes)
+FROM 
+   posts
+RIGHT JOIN (select * from vote where vote.vote_type=True) as upvotes
+   ON posts.post_id = upvotes.post_id
+GROUP BY posts.post_id;
+    
+/**
+SELECT 
+groupposts.post_id,groupposts.user_id,groupposts.group_id,groupposts.header,groupposts.body,groupposts.send_timestamp,COALESCE(sum(CASE WHEN vote.vote_type THEN 1 ELSE -1 END),-1)
+FROM 
+(select * from posts where group_id=4) as groupposts
+LEFT JOIN vote
+ON groupposts.post_id = vote.post_id
+GROUP BY groupposts.post_id,groupposts.user_id,groupposts.group_id,groupposts.header,groupposts.body,groupposts.send_timestamp
+order by coalesce;
+*/

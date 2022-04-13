@@ -15,11 +15,11 @@ async function lastweekpostspostedcount(){
 	return await getcountsql(sqltext);
 }
 
-function lastweekvotesusecount(){
+async function lastweekvotesusecount(){
 	// TODO: IN ORDER TO GET VOTES BY TIMESTAMP ADD VOTE TIMESTAMP TO DATABASE 
-	const SQLtext = `select count(*) from votes WHERE vote_timestamp > current_date - interval '7 days';`
-
-	return '0000'
+	const SQLtext = `select count(*) from vote WHERE vote_timestamp > current_date - interval '7 days';`
+	
+	return await getcountsql(SQLtext)
 }
 async function lastweekgroupcreationcount(){
 	const SQLtext = `select count(*) from groups WHERE group_create_timestamp > current_date - interval '7 days';`

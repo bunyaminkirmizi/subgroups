@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS permissions (
 CREATE TABLE IF NOT EXISTS vote(
   user_id int NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
   post_id int NOT NULL REFERENCES posts(post_id) ON DELETE CASCADE,
-  vote_type boolean
+  vote_type boolean,
+  vote_timestamp timestamp
 );
 
 CREATE TABLE IF NOT EXISTS comment (

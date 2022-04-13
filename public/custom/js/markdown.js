@@ -1,20 +1,52 @@
-var simplemde = new SimpleMDE({ element: document.getElementById("editor") });
 
+var editor = document.getElementById("editor")
+if (editor){
+	try{
+		var simplemde = new SimpleMDE({ element: editor });
+	}catch(e){
+		console.log(e);
+	}
+	
+}
 var mdtext = document.getElementById('markdown_detailed_text')
 if(mdtext){
 	mdtext.innerHTML = marked.parse(document.getElementById('markdown_detailed_text').innerHTML);
-	mdtext.querySelectorAll("img").forEach(element => {
-		console.log(element.classList.add("card-img"));
-	});
+	try{
+		mdtext.querySelectorAll("img").forEach(element => {
+			console.log(element.classList.add("card-img"));
+		});
+	}catch (e){
+		console.log(e)
+	}
+	
 }
 
 var mdtextlist = document.getElementsByClassName('markdown_detailed_render')
-for(let i=0;i<mdtextlist.length;i++){
-    const element = mdtextlist[i];
-    element.innerHTML = marked.parse(element.innerHTML);
-	element.querySelectorAll("img").forEach(element => {
-		console.log(element.classList.add("card-img"));
-	});
+if(mdtextlist){
+	try{
+		for(let i=0;i<mdtextlist.length;i++){
+			const element = mdtextlist[i];
+			element.innerHTML = marked.parse(element.innerHTML);
+			element.querySelectorAll("img").forEach(element => {
+				console.log(element.classList.add("card-img"));
+			});
+		}
+	}catch(e){
+		console.log(e)
+	}
+	
 }
 
-document.getElementsByClassName('CodeMirror')[0].classList.add('mt-0')
+
+var codemrr = document.getElementsByClassName('CodeMirror')
+if(codemrr){
+	try{
+		if(codemrr[0]){
+			codemrr[0].classList.add('mt-0')
+		}
+		
+	}catch(e){
+		console.log(e)
+	}
+	
+}

@@ -14,6 +14,8 @@ block content
               | Burada kendinize ait gruplar oluşturabilir ve dilediğiniz gruplara katılıp gönderiler paylaşabilirsiniz.
               br
               a.btn.btn-warning.ms-6.mt-2.mb-2(href="/register/") Şimdi Kayıt Ol
+              br
+              a.btn.btn-info.ms-6.mt-2.mb-2(href="#nasilkullanirim") Nasıl kullanacağını öğren
   .row.mt-2
     .col-md-6
       .card
@@ -45,7 +47,7 @@ block content
           |  gönderi paylaşıldı
           br
           strong=statistics.usedvotes
-          |  kez oy kullanıldı oylandı
+          |  kez oy kullanıldı
           br
           strong=statistics.newgroups
           |  yeni grup oluşturuldu
@@ -55,10 +57,11 @@ block content
       .card
         h5.card-header='Haftanın Enleri'
         .card-body
-          a(href=statistics.mostvoted) en çok oylanan gönderi #{statistics.mostvoted.header}
-          br
+          if mostvoted
+            a(href=statistics.mostvoted) en çok oylanan gönderi #{statistics.mostvoted.header}
+            br
           a(href=statistics.activegroup) en aktif grup
           br
     unless is_authenticated
-      .row
+      .row.mt-2#nasilkullanirim
         include frontpageinfo.pug
