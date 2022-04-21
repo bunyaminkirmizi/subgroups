@@ -1,20 +1,42 @@
 extends ../base.pug
 
 block content
-    .row
-        .col-md-4.offset-md-4
-            .login-form.bg-light.mt-4.p-4
-                form.row.g-3(action='' method='post')
-                        input.form-control(type='text' name='username' minLength="5" placeholder='Kullanıcı adı')
-                        input.form-control(type='password' name='password' minLength="8" placeholder='Parola')
-                        .form-check
-                            input#rememberMe.form-check-input(name='remember_me' type='checkbox')
-                            label.form-check-label(for='rememberMe') Beni hatırla
-                        button.btn.btn-outline-success.float-end(type='submit') Giriş yap
-                hr.mt-4
-                p.text-center.mb-0
-                | Bir hesabınız henüz yok mu? 
-                a(href='/register/') Kayıt olun
-                p.text-center.mb-0
-                | Şifrenizi mi unuttunuz? 
-                a(href='/getnewpassword/') Yeni bir şifre alın
+  .row.login-container.h-100.m-0
+    .col-lg-10.col-xl-9.mx-auto.my-auto
+      .card.flex-row.my-5.border-0.shadow.rounded-3.overflow-hidden
+        .card-img-left-register-login.d-none.d-md-flex
+          // Background image for card set in CSS!
+        .card-body.p-4.p-sm-5
+          h5.card-title.text-center.mb-5.fw-light.fs-5 Giriş Yap
+          form(action='' method='post')
+            .form-floating.mb-3
+              input#floatingInputUsername.form-control(type='text'  minLength="5" placeholder='myusername' name='username' required='' autofocus='')
+              label(for='floatingInputUsername') Kullan&imath;c&imath; ad&imath;
+            .form-floating.mb-3
+              input#floatingInputEmail.form-control(type='password' minLength="8" name='password' placeholder='name@example.com')
+              label(for='floatingInputEmail') Parola
+            .d-grid.mb-2
+              button.btn.btn-lg.btn-primary.btn-login.fw-bold(type='submit')
+                | G&Idot;R&Idot;&Scedil;
+                | YAP
+            a.d-block.text-center.mt-2.small(href='/register/')
+              | Hen&uuml;z kay&imath;t olmad&imath;n&imath;z m&imath;? Kay&imath;t
+              | olun
+
+    //- .row
+    //-     .col-md-4.offset-md-4
+    //-         .login-form.bg-light.mt-4.p-4
+    //-             form.row.g-3(action='' method='post')
+    //-                     input.form-control(type='text' name='username' minLength="5" placeholder='Kullanıcı adı')
+    //-                     input.form-control(type='password' name='password' minLength="8" placeholder='Parola')
+    //-                     .form-check
+    //-                         input#rememberMe.form-check-input(name='remember_me' type='checkbox')
+    //-                         label.form-check-label(for='rememberMe') Beni hatırla
+    //-                     button.btn.btn-outline-success.float-end(type='submit') Giriş yap
+    //-             hr.mt-4
+    //-             p.text-center.mb-0
+    //-             | Bir hesabınız henüz yok mu? 
+    //-             a(href='/register/') Kayıt olun
+    //-             p.text-center.mb-0
+    //-             | Şifrenizi mi unuttunuz? 
+    //-             a(href='/getnewpassword/') Yeni bir şifre alın

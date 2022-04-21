@@ -55,13 +55,18 @@ nav.navbar.sticky-top.navbar-expand-lg.navbar-light.bg-light.pt-1.pb-2
                   a.dropdown-item(href="?filter=clear") Filtreyi Temizle
       .d-flex.ml-2.mb-0
         if is_authenticated
-          a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#groupsModalSm')
-            i.mt-1.fas.fa-plus
-          if group
-
-
-            a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#postSendModal')
-              i.mt-1.fas.fa-pen            
+          
+          //- if group
+          //-   if group.info.is_owner  
+          //-     a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#groupsModalSm')
+          //-       i.mt-1.fas.fa-plus
+          //-     a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#postSendModal')
+          //-         i.mt-1.fas.fa-pen
+          //-   if group.info.is_participant
+          //-     a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#postSendModal')
+          //-       i.mt-1.fas.fa-pen
+              
+                      
           .dropdown#dropdown_message_link.btn.btn-primary.me-2(href='messagebox' role='button' data-bs-toggle='dropdown' aria-expanded='false')
               i.mt-1.fas.fa-envelope
           ul.dropdown-menu.dropdown-menu-end(aria-labelledby='dropdown_message_link')

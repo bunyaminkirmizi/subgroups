@@ -1,10 +1,15 @@
-/*group actions list
+/*
+group actions list
 create groups
 delete groups
 join groups
 leave groups
+is participant check
+is owner
 get subgroups
 get parent group
+make private
+make public
 */
 
 const connect = require('./connect');
@@ -73,24 +78,54 @@ function delete_group(group_id) {
 		(err)=>console.log(err))
 	}
 
-function join_group(user_id,group_id) {
-	connect.pool.query(
-		"INSERT INTO group_participants(group_id,user_id) values($1,$2)",
-		[group_id,user_id],
+async function join_group(user_id,group_id) {
+	await connect.pool.query(
+		"INSERT INTO group_participants(user_id,group_id) values($1,$2)",
+		[user_id,group_id],
 		(err)=>console.log(err)
 		)
+	}
+	
+async function leave_group(user_id,group_id) {
+	connect.pool.query(
+		"DELETE FROM group_participants WHERE user_id =  $1 AND group_id=$2",
+		[user_id,group_id],
+		(err)=>console.log(err)
+		)
+	}
+async function is_owner(user_id,group_id) {
+	try{
+		const grp = await get_group(group_id)
+		console.log("owner",grp.user_id)
+		if(grp.user_id == user_id) return true;
+		return false
+	}catch{
+		console.log("err while is owner database check")
+		return false
+	}
+	
+	}
+async function is_participant(user_id,group_id) {
+	const sqltext = "SELECT * FROM group_participants where user_id=$1  and  group_id = $2"
+	const values = [user_id,group_id]
+	try {
+		const db_response = (await connect.pool.query(sqltext, values)).rows[0];
+		console.log("db_response=>",db_response)
+		if(db_response != undefined){
+			return true
+		}
+		return false
+	  } catch (err) {
+		console.log(err.stack)
+		return false
+	  }
 	}
 
-function leave_group(user_id,group_id) {
-	connect.pool.query(
-		"DELETE FROM group_participants WHERE group_id=$1 AND user_id =  $2",
-		[group_id,user_id],
-		(err)=>console.log(err)
-		)
-	}
+
+
 async function get_group(group_id) {
 	let group = null
-	const sqltext = 'select group_id, group_name from groups where group_id=$1;'
+	const sqltext = 'select group_id, group_name,user_id from groups where group_id=$1;'
 	const values = [group_id]
 	try {
 		group = (await connect.pool.query(sqltext, values)).rows[0];
@@ -137,9 +172,11 @@ async function get_parents(group_id,parents) {
 		
 	  }
 	}
+
 function make_group_public(user_id,group_id) {
 	return null
 	}
+	
 function make_group_private(user_id,group_id) {
 	return null
 	}
@@ -152,7 +189,9 @@ module.exports = {
 	make_child:make_child,
 	create_group_under_parent:create_group_under_parent,
 	get_subs:get_subs,
+	is_participant:is_participant,
 	get_group:get_group,
 	get_parents:get_parents,
+	is_owner:is_owner,
 	recursive_group_traverse:recursive_group_traverse
 }

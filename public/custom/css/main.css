@@ -59,12 +59,43 @@ a:active {
 	height: 120px;
 }
 
+.bannercard {
+	height: 150px;
+}
+
 .fixedcardsizefrontpagerow {
 	height: 250px;
 }
 
 .fixedcardsize400 {
 	height: 320px;
+}
+
+/* register and login pages */
+
+.login-container {
+	background: #007bff;
+	background: linear-gradient(to right, #570279, #33AEFF);
+}
+
+.card-img-left-register {
+	width: 45%;
+	/* Link to your background image using in the property below! */
+	background: scroll center url('/assets/svgs/undraw_sunlight_re_0usx.svg');
+	background-size: cover;
+}
+
+.card-img-left-register-login {
+	width: 45%;
+	/* Link to your background image using in the property below! */
+	background: scroll center url('/assets/svgs/undraw_innovative_re_rr5i.svg');
+	background-size: cover;
+}
+
+.btn-login {
+	font-size: 0.9rem;
+	letter-spacing: 0.05rem;
+	padding: 0.75rem 1rem;
 }
 
 /* body {

@@ -16,14 +16,29 @@ html(lang="en")
 
   body
     include nav.pug
-    .container.mt-2
-      if message
-        .alert.alert-dismissible.mt-2.me-2.ms-2(class="alert-"+message.type)
-          button.btn-close(type='button' data-bs-dismiss='alert')
-          strong=message.header
-          p=message.body
-        div.container.mt-2
-      block content
+    if message
+      #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+        .modal-dialog
+          .modal-content
+            .modal-header
+              h5#exampleModalLabel.modal-title Modal title
+              button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+            .modal-body
+              | ...
+            .modal-footer
+              button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+              button.btn.btn-primary(type='button') Save changes
+
+
+      .script
+        let myModal = new bootstrap.Modal(document.getElementById('messagealert'), {});
+        myModal.show()
+      .alert.alert-dismissible.mt-2.me-2.ms-2(class="alert-"+message.type)
+        button.btn-close(type='button' data-bs-dismiss='alert')
+        strong=message.header
+        p=message.body
+      div.container.mt-2
+    block content
     //- footer.footer.mt-auto.py-3.bg-light
     //-   .container
     //-     center

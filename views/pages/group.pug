@@ -1,74 +1,127 @@
 extends ../base.pug
 
 block content
-
-  if group
-    .card.mb-3.text-center
-      nav.navbreadcrumb.text-center(style="--bs-breadcrumb-divider: '"+'/'+"';" aria-label='breadcrumb')
-        ol.breadcrumb.ms-1.mt-1.mb-1
-          each parent in group.parents
-            li.breadcrumb-item
-              a(href=parent.id)=parent.name
+ //- if group
+ .row.mt-2.mb-2.me-2.ms-2
+  .col
+   .card.bg-dark.text-white.banner.w-100.mh-25.bannercard.overflow-hidden.shadow
+    img.card-img(src='https://dummyimage.com/10x10/000/fff' alt='...')
     
+    .card-img-overlay
     
+      h5.card-title.text-center=group.current.group_name
+      
+      //- p.card-text
+      //-   | Buraya bu grup hakkinda kisa bilgilendirici bir yazi yazabilirsiniz
+      //-   | content. This content is a little bit longer.
+      
+      p.card-text.text-center bu grupta x adet katılımcı var
+      if group.info.is_owner  
+          a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#groupsModalSm')
+            i.mt-1.fas.fa-plus
+          a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#postSendModal')
+              i.mt-1.fas.fa-pen
+      if group.info.is_participant
+          a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#postSendModal')
+            i.mt-1.fas.fa-pen
+      if group.info.is_owner
 
-  each post in posts
-   .card.mb-3.bordered.button-to-the-top.overflowhidden
-    .row.g-0
-      .col-md-2.text-center.mt-2
-        if is_authenticated
-          button.btn.vote_buttons_no_focus(onclick="giveupvote("+post.post_id+")")
-            if post.user_given_vote
-              svg.bi.bi-arrow-up.upvoted(id="arrowup"+post.post_id xmlns='http://www.w3.org/2000/svg' font-weight='bold' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
-                path(fill-rule='evenodd' d='M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z')
-            else
-              svg.bi.bi-arrow-up(id="arrowup"+post.post_id xmlns='http://www.w3.org/2000/svg' font-weight='bold' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
-                path(fill-rule='evenodd' d='M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z')
+        .btn.btn-outline-warning.float-end
+          i.mt-1.fas.fa-pen
+          |  kapak fotoğrafını değiştir
 
-          h4(id="vc"+post.post_id)=post.votecount
-          button.btn.vote_buttons_no_focus(onclick="givedownvote("+post.post_id+")")
-            if post.user_given_vote == undefined
+      //- p.card-text Son gönderi x dakika önce gönderildi
+
+ .row.mt-2.mb-2.me-2.ms-2
+
+  .col-9
+    if group
+      .card.mb-3.text-center
+        nav.navbreadcrumb.text-center(style="--bs-breadcrumb-divider: '"+'/'+"';" aria-label='breadcrumb')
+          ol.breadcrumb.ms-1.mt-1.mb-1
+            each parent in group.parents
+              li.breadcrumb-item
+                a(href=parent.id)=parent.name
+
+    each post in posts
+     .card.mb-3.bordered.button-to-the-top.overflowhidden
+      .row.g-0
+        .col-md-2.text-center.mt-2
+          if is_authenticated
+            button.btn.vote_buttons_no_focus(onclick="giveupvote("+post.post_id+")")
+              if post.user_given_vote
+                svg.bi.bi-arrow-up.upvoted(id="arrowup"+post.post_id xmlns='http://www.w3.org/2000/svg' font-weight='bold' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
+                  path(fill-rule='evenodd' d='M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z')
+              else
+                svg.bi.bi-arrow-up(id="arrowup"+post.post_id xmlns='http://www.w3.org/2000/svg' font-weight='bold' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
+                  path(fill-rule='evenodd' d='M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z')
+
+            h4(id="vc"+post.post_id)=post.votecount
+            button.btn.vote_buttons_no_focus(onclick="givedownvote("+post.post_id+")")
+              if post.user_given_vote == undefined
+                  svg.bi.bi-arrow-down(id="arrowdown"+post.post_id xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
+                    path(fill-rule='evenodd' d='M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z')
+              else if post.user_given_vote
                 svg.bi.bi-arrow-down(id="arrowdown"+post.post_id xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
                   path(fill-rule='evenodd' d='M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z')
-            else if post.user_given_vote
-              svg.bi.bi-arrow-down(id="arrowdown"+post.post_id xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
-                path(fill-rule='evenodd' d='M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z')
-            else
-                svg.bi.bi-arrow-down.downvoted(id="arrowdown"+post.post_id xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
-                  path(fill-rule='evenodd' d='M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z')
-        else
-          h4.mt-5(id="vc"+post.post_id)=post.votecount
-        br
-        if user
-         if post.user_id == user.user_id
-           a.btn.btn-outline-danger.delete-button.mt-2(href="/post/delete?post_id="+post.post_id)
-             i.fa.fa-trash
-           |  
-           a.btn.btn-outline-info.mt-2(type='button' data-bs-toggle='modal' data-bs-target='#updatePostModal'+post.post_id)
-             i.fa.fa-edit
-               
-        .text-secondary #{post.send_timestamp.toLocaleString("en-GB", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})}
-        a.btn.pt-1.pb-1(href='#')=post.sender
+              else
+                  svg.bi.bi-arrow-down.downvoted(id="arrowdown"+post.post_id xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
+                    path(fill-rule='evenodd' d='M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z')
+          else
+            h4.mt-5(id="vc"+post.post_id)=post.votecount
+          br
+          if user
+           if post.user_id == user.user_id
+             a.btn.btn-outline-danger.delete-button.mt-2(href="/post/delete?post_id="+post.post_id)
+               i.fa.fa-trash
+             |  
+             a.btn.btn-outline-info.mt-2(type='button' data-bs-toggle='modal' data-bs-target='#updatePostModal'+post.post_id)
+               i.fa.fa-edit
+                 
+          .text-secondary #{post.send_timestamp.toLocaleString("en-GB", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})}
+          a.btn.pt-1.pb-1(href='#')=post.sender
 
-      .col-md-10
-          a.stretched-link(href='/post/detail?post_id='+post.post_id)
-          .card-body.fixedcardsize
-            h5.card-title=post.header
-            p.card-text.markdown_detailed_render=post.body
-      //- .col-md-2.align-middle 
-      //-     img.align-middle.img-fluid.rounded-end.mt-2(src='/images/2ed316af9643d35456022868f80fbbd4', alt='...', width='200px' height='500px')
-      
-   .modal(id='updatePostModal'+post.post_id tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
-     .modal-dialog.modal-lg
-       .modal-content
-         .modal-header
-           h5#groupsModalSmLabel.modal-title.h4= 'Update Post'+post.post_id
-           button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
-         .modal-body
-           form.row.g-3(action='/post/update?post_id='+post.post_id method='post')
-             input.form-control(type='text' name='post_header' minLength="5" placeholder='Header' value=post.header)
-             textarea.form-control( name='post_body' rows='15')=post.body
-             input#hidden2(type='hidden' name='group_id' value=post.group_id)
-             button.btn.btn-outline-info.float-end(type='submit') Update
-             
-     
+        .col-md-10
+            a.stretched-link(href='/post/detail?post_id='+post.post_id)
+            .card-body.fixedcardsize
+              h5.card-title=post.header
+              p.card-text.markdown_detailed_render=post.body
+              
+     .modal(id='updatePostModal'+post.post_id tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
+       .modal-dialog.modal-lg
+         .modal-content
+           .modal-header
+             h5#groupsModalSmLabel.modal-title.h4= 'Update Post'+post.post_id
+             button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+           .modal-body
+             form.row.g-3(action='/post/update?post_id='+post.post_id method='post')
+               input.form-control(type='text' name='post_header' minLength="5" placeholder='Header' value=post.header)
+               textarea.form-control( name='post_body' rows='15')=post.body
+               input#hidden2(type='hidden' name='group_id' value=post.group_id)
+               button.btn.btn-outline-info.float-end(type='submit') Update
+  .col-3
+    .card.shadow
+      .card-body
+       p.mt-2
+        strong Hakkında
+       p grubun hakkinda genel bilgiler veren bir kisimdir burasi ve istenilen buraya yazilabilir isteyen istedigini yazabilir
+       p bu grupta x adet kullanici vardir
+       p bu grubun sahibi x kullanicisidir
+
+       if group
+        if group.info
+          unless group.info.is_owner
+            if group.info.is_participant
+              a.btn.btn-outline-danger(href='/group/leave/'+group.current.group_id)  Bu gruptan çık
+            else
+              a.btn.btn-outline-success(href='/group/join/'+group.current.group_id) Bu gruba katıl
+          else
+            if group.info.is_owner
+              hr
+              .btn.btn-outline-danger.mt-2
+                i.mt-1.fas.fa-trash
+                |  grubu sil
+              | 
+              .btn.btn-outline-secondary.mt-2
+                i.mt-1.fas.fa-lock 
+                |  grubu gizle

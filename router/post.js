@@ -4,7 +4,6 @@ const { authentication_required } = require("../db/auth");
 const auth = require("../db/auth");
 const posts = require("../db/posts");
 const groups = require("../db/groups");
-const { redirect } = require("express/lib/response");
 const votes = require("../db/votes");
 
 const router = express.Router();

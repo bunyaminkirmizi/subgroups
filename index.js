@@ -32,17 +32,20 @@ app.post('/upload/:filename', upload.single('filename'), (req, res) => {
 
 const user = require("./router/user");
 const post = require("./router/post");
-const sub = require("./router/sub");
+const group = require("./router/group");
 
 app.use("/user", user);
 app.use("/post", post);
-app.use("/sub", sub);
+app.use("/group", group);
+
 const port = process.env.PORT
 const auth = require('./db/auth');
 const groups = require('./db/groups');
 const posts = require('./db/posts')
 const { TreeNode } = require('./db/tree')
 const stats = require('./db/stats')
+const { info } = require('console')
+const { is_authanticated } = require('./db/auth')
 
 app.use(express.urlencoded({ extended: true })); //Used fore parsing body elements
 app.set('trust proxy', 1) // trust first proxy
@@ -73,9 +76,21 @@ app.get('/user/profile',auth.authentication_required, async (req, res) => {
   })
 })
 
-
 app.get('/group/:group_id', async (req, res) => {
   const group_id = req.params.group_id
+  let group_info = {
+    is_participant: false,
+    is_owner: false
+  }
+  if(auth.is_authanticated(req.session)){
+    const user_id = req.session.user.user_id
+    group_info = {
+      is_participant: await groups.is_participant(user_id,group_id),
+      is_owner: await groups.is_owner(user_id,group_id)
+    }
+    console.log("group_info",group_info)
+  }
+  console.log('group info',group_info)
   const current_group = await groups.get_group(group_id)
   let tree = new TreeNode()
 	await groups.recursive_group_traverse(group_id,tree)
@@ -84,7 +99,8 @@ app.get('/group/:group_id', async (req, res) => {
       current:current_group,
       parent:{"group_id":"2","group_name":"parent"},
       subs:await groups.get_subs((await groups.get_group(group_id)).group_id),
-      parents: (await groups.get_parents(group_id,[])).reverse()
+      parents: (await groups.get_parents(group_id,[])).reverse(),
+      info: group_info
     }
     res.render('pages/group', {
       title: 'sub | '+ g_dropdown.current.group_name,
@@ -93,6 +109,7 @@ app.get('/group/:group_id', async (req, res) => {
       group:g_dropdown,
       posts:await posts.get_post_by_group(group_id,req.session.user,req.query.filter),
       tree:tree,
+      // message: req.message,
       filter: {name: req.query.filtername}
     })
     return;
@@ -116,6 +133,23 @@ app.post('/group/new',auth.authentication_required, async (req, res) => {
     return;
   }
   res.redirect('/group/'+new_group)
+})
+
+app.get('/group/join/:group_id',auth.authentication_required, async (req, res) => {
+  const group_id =req.params.group_id
+  const user_id = req.session.user.user_id
+  
+  await groups.join_group(user_id,group_id)
+  console.log("joingroup=>",await groups.is_participant(user_id,group_id));
+  res.redirect('/group/'+req.params.group_id)
+})
+
+app.get('/group/leave/:group_id',auth.authentication_required, async (req, res) => {
+  const group_id =req.params.group_id
+  const user_id = req.session.user.user_id
+  await groups.leave_group(user_id,group_id)
+  console.log("leavegroup=>",await groups.is_participant(user_id,group_id));
+  res.redirect('/group/'+req.params.group_id)
 })
 
 app.get('/login/',auth.allow_just_not_logged_in, (req, res) => {
