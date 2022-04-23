@@ -103,7 +103,7 @@ app.get('/group/:group_id', async (req, res) => {
       info: group_info
     }
     res.render('pages/group', {
-      title: 'sub | '+ g_dropdown.current.group_name,
+      title: 'grup | '+ g_dropdown.current.group_name,
       user:req.session.user,
       is_authenticated:  auth.is_authanticated(req.session),
       group:g_dropdown,

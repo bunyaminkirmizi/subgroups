@@ -5,8 +5,10 @@ block content
  .row.mt-2.mb-2.me-2.ms-2
   .col
    .card.bg-dark.text-white.banner.w-100.mh-25.bannercard.overflow-hidden.shadow
-    img.card-img(src='https://dummyimage.com/10x10/000/fff' alt='...')
-    
+    if group.info.image
+      //- img.card-img(src='https://dummyimage.com/10x10/000/fff' alt='...')
+    else 
+      img.card-img(src='https://dummyimage.com/10x10/000/fff' alt='...')
     .card-img-overlay
     
       h5.card-title.text-center=group.current.group_name
