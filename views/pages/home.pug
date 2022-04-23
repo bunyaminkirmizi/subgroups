@@ -3,7 +3,10 @@ extends ../base.pug
 block content
   
 
-
+  if is_authenticated
+      
+      a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#groupsModalSm')
+        i.mt-1.fas.fa-plus
   unless is_authenticated
     .row
       .card.text-white.mt-2.p-0

@@ -20,8 +20,9 @@ CREATE TABLE IF NOT EXISTS groups (
   group_id BIGSERIAL PRIMARY KEY,
   user_id int NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
   group_name varchar(30),
-  is_public boolean,
-  group_create_timestamp timestamp
+  is_public boolean DEFAULT TRUE,
+  group_create_timestamp timestamp,
+  -- group_info TEXT
 );
 
 CREATE TABLE IF NOT EXISTS posts (

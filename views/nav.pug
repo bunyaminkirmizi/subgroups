@@ -196,6 +196,26 @@ if group
             textarea#editor.form-control.mt-0( name='post_body' rows='15' placeholder="İçerik")
             input#hidden2(type='hidden' name='group_id' value=group.current.group_id)
             button.btn.btn-outline-success.float-end(type='submit') Gönder
+  #deleteGroupModal.modal(tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
+    .modal-dialog.modal-md
+      .modal-content
+        //- form(action='/upload/filename' method='post' enctype='multipart/form-data')
+        //- input(type='submit')
+        //-   label.form-label(for='formFileMultiple') Dosyalarınızı buradan yükleyebilirsiniz
+        //-     //- input#myFile(type='file' name="filename" multiple='')
+
+        .modal-header
+        
+          h5#groupsModalSmLabel.modal-title.h4 Emin misiniz?
+          //- button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+        .modal-body
+          //- form.row.g-3(action='/upload/filenameeessees' method='post')
+          .modal-text
+            strong=group.current.group_name
+            |  adlı grubu silmek üzeresiniz
+          .float-end
+            a.btn.btn-danger(href='/group/delete/'+group.current.group_id) sil
+            button.btn.btn-secondary.ms-2(type='button' data-bs-dismiss='modal' aria-label='Close') iptal
   
   #treeShowModal.modal(tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
     .modal-dialog.modal-lg

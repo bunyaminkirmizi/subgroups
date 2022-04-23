@@ -4,9 +4,9 @@ block content
  //- if group
  .row.mt-2.mb-2.me-2.ms-2
   .col
-   .card.bg-dark.text-white.banner.w-100.mh-25.bannercard.overflow-hidden.shadow
-    if group.info.image
-      //- img.card-img(src='https://dummyimage.com/10x10/000/fff' alt='...')
+   .card.text-white.banner.w-100.mh-25.bannercard.overflow-hidden.shadow
+    if group.info.banner
+      img.card-img(src='/group_banners/'+group.current.group_id alt='...')
     else 
       img.card-img(src='https://dummyimage.com/10x10/000/fff' alt='...')
     .card-img-overlay
@@ -120,10 +120,16 @@ block content
           else
             if group.info.is_owner
               hr
-              .btn.btn-outline-danger.mt-2
+              .btn.btn-outline-danger.mt-2.me-2(type='button' data-bs-toggle='modal' data-bs-target='#deleteGroupModal')
                 i.mt-1.fas.fa-trash
                 |  grubu sil
-              | 
-              .btn.btn-outline-secondary.mt-2
-                i.mt-1.fas.fa-lock 
-                |  grubu gizle
+              //- h1=JSON.stringify(group.info) 
+              if group.info.status
+                
+                a.btn.btn-outline-secondary.mt-2(href='/group/makeprivate/'+group.current.group_id)
+                  i.mt-1.fas.fa-lock
+                  |  grubu gizle
+              else
+                a.btn.btn-outline-secondary.mt-2(href='/group/makepublic/'+group.current.group_id)
+                  i.mt-1.fas.fa-lock-open
+                  |  grubu aç

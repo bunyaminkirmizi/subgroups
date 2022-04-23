@@ -10,6 +10,7 @@ get subgroups
 get parent group
 make private
 make public
+get status
 */
 
 const connect = require('./connect');
@@ -73,7 +74,14 @@ async function make_child(group_id,parent_group_id){
 
 function delete_group(group_id) {
 	connect.pool.query(
+		"delete from groups_hierarchy where group_id = $1",
+		
+		[group_id],
+		(err)=>console.log(err))
+	
+	connect.pool.query(
 		"DELETE FROM groups	where group_id = $1",
+		
 		[group_id],
 		(err)=>console.log(err))
 	}
@@ -153,10 +161,21 @@ async function get_subs(group_id) {
 	return groups;
 	}
 
+async function get_parent(group_id) {
+	const sqltext = 'select parent_group_id from groups_hierarchy where group_id=$1'
+	const values = [group_id]
+	try {
+		const parent = (await connect.pool.query(sqltext, values)).rows[0]
+		return parent
+
+		} catch (err) {
+		return null;
+		}
+	}
 async function get_parents(group_id,parents) {
 	const sqltext = 'select parent_group_id from groups_hierarchy where group_id=$1'
 	const values = [group_id]
-	console.log(parents)
+	console.log('parentssss==>',parents)
 	try {
 		const parent_id = (await connect.pool.query(sqltext, values)).rows[0].parent_group_id
 		if(parent_id == 1){
@@ -173,14 +192,27 @@ async function get_parents(group_id,parents) {
 	  }
 	}
 
-function make_group_public(user_id,group_id) {
-	return null
-	}
-	
-function make_group_private(user_id,group_id) {
-	return null
+function make_group_public(group_id) {
+	const sqltext = "UPDATE groups SET is_public = TRUE WHERE group_id = $1;"
+	const values = [group_id]
+	connect.pool.query(sqltext,values,
+		(err)=>console.log(err)
+		)
 	}
 
+function make_group_private(group_id) {
+	const sqltext = "UPDATE groups SET is_public = FALSE WHERE group_id = $1;"
+	const values = [group_id]
+	connect.pool.query(sqltext,values,
+		(err)=>console.log(err)
+		)
+	}
+async function get_status(group_id) {
+	const sqltext = "SELECT is_public from groups where group_id = $1"
+	// const sqltext = "UPDATE groups SET is_public = FALSE WHERE group_id = $1;"
+	const values = [group_id]
+	return (await connect.pool.query(sqltext, values)).rows[0].is_public
+}
 module.exports = {
 	create_group:create_group,
 	delete_group:delete_group,
@@ -193,5 +225,9 @@ module.exports = {
 	get_group:get_group,
 	get_parents:get_parents,
 	is_owner:is_owner,
-	recursive_group_traverse:recursive_group_traverse
+	recursive_group_traverse:recursive_group_traverse,
+	get_parent:get_parent,
+	make_group_public:make_group_public,
+	make_group_private:make_group_private,
+	get_status:get_status
 }

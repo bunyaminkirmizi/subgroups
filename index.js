@@ -4,6 +4,7 @@ const session = require('express-session')
 const multer  = require('multer')
 
 const upload = multer({ dest: './public/images/',limits: { fileSize: 1000000*90 } })
+const banner_upload = multer({ dest: './public/group_banners/',limits: { fileSize: 1000000*90 } })
 require("dotenv").config();
 const app = express()
 app.use(session({
@@ -30,6 +31,18 @@ app.post('/upload/:filename', upload.single('filename'), (req, res) => {
   })
 })
 
+app.post('/upload_banner/:filename', upload.single('filename'), (req, res) => {
+  const group_id = 1;
+  let filepath = null
+  if(req.file){
+    console.log("file uploaded"+req.file.filename)
+    filepath = "/images/"+req.file.filename
+  }else{
+    console.log("req.file didn't worked");
+  }
+  res.redirect('/group/'+group_id)
+})
+
 const user = require("./router/user");
 const post = require("./router/post");
 const group = require("./router/group");
@@ -46,6 +59,7 @@ const { TreeNode } = require('./db/tree')
 const stats = require('./db/stats')
 const { info } = require('console')
 const { is_authanticated } = require('./db/auth')
+const { redirect } = require('express/lib/response')
 
 app.use(express.urlencoded({ extended: true })); //Used fore parsing body elements
 app.set('trust proxy', 1) // trust first proxy
@@ -76,17 +90,37 @@ app.get('/user/profile',auth.authentication_required, async (req, res) => {
   })
 })
 
+app.get('/group/delete/:group_id',auth.authentication_required,group_ownership_required, async (req, res) => {
+  const group_id = req.params.group_id
+  req.query.group_id = group_id
+  try{
+    const parent = (await groups.get_parent(group_id))
+    console.log('papapaprent==>',parent);
+    await groups.delete_group(group_id)
+    res.redirect('/group/'+parent.parent_group_id)
+  }catch{
+    console.log("can't get group parent")
+    groups.delete_group(group_id)
+    res.redirect('/')
+    return;
+  }
+})
+
 app.get('/group/:group_id', async (req, res) => {
   const group_id = req.params.group_id
   let group_info = {
     is_participant: false,
-    is_owner: false
+    is_owner: false,
+    banner: true
   }
+  // console.log("satuususuusususu",)
   if(auth.is_authanticated(req.session)){
     const user_id = req.session.user.user_id
     group_info = {
       is_participant: await groups.is_participant(user_id,group_id),
-      is_owner: await groups.is_owner(user_id,group_id)
+      is_owner: await groups.is_owner(user_id,group_id),
+      banner: true,
+      status:(await groups.get_status(group_id))
     }
     console.log("group_info",group_info)
   }
@@ -141,6 +175,39 @@ app.get('/group/join/:group_id',auth.authentication_required, async (req, res) =
   
   await groups.join_group(user_id,group_id)
   console.log("joingroup=>",await groups.is_participant(user_id,group_id));
+  res.redirect('/group/'+req.params.group_id)
+})
+
+async function group_ownership_required(req,res,next) {
+	const user_id = req.session.user.user_id
+	const group_id = req.params.group_id
+	const group = await groups.get_group(group_id)
+  console.log("group ownership check",user_id,group_id,group)
+	if(group == undefined){
+		res.redirect('/');
+	}else if(group.user_id == user_id){
+		next();
+	}else{
+		console.log("ownership rejected because group"+group_id+"owner is "+group.user_id+" but user"+user_id+" tried action")
+		res.redirect('/');
+	}
+}
+
+app.get('/group/makeprivate/:group_id',auth.authentication_required,group_ownership_required, async (req, res) => {
+  const group_id =req.params.group_id
+  const user_id = req.session.user.user_id
+  
+  groups.make_group_private(group_id)
+  console.log("stastus", await groups.get_status(group_id));
+  res.redirect('/group/'+req.params.group_id)
+})
+
+app.get('/group/makepublic/:group_id',auth.authentication_required,group_ownership_required, async (req, res) => {
+  const group_id =req.params.group_id
+  const user_id = req.session.user.user_id
+  console.log("stastus",await groups.get_status(group_id));
+  groups.make_group_public(group_id)
+  // console.log("make_group_public=>",await groups.is_participant(user_id,group_id));
   res.redirect('/group/'+req.params.group_id)
 })
 

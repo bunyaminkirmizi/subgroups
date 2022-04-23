@@ -192,8 +192,6 @@ module.exports = {
 	upvote:upvote,
 	downvote:downvote,
 	get_post_with_user_given_vote:get_post_with_user_given_vote
-
-
 }
 
 
