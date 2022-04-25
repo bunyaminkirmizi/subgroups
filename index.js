@@ -128,6 +128,16 @@ app.get('/user/profile',auth.authentication_required, async (req, res) => {
   })
 })
 
+app.get('/howto', async (req, res) => {
+  // const user_id = req.session.user.user_id
+  console.log(req.session.user)
+  res.render('pages/howto.pug', {
+    title: 'nasıl kullanırım?',
+    user:req.session.user,
+    is_authenticated: auth.is_authanticated(req.session),
+  })
+})
+
 app.get('/user/:user_id',auth.authentication_required, async (req, res) => {
   const user_id = req.params.user_id
   res.render('pages/profile', {

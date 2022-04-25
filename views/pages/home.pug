@@ -16,7 +16,7 @@ block content
               br
               a.btn.btn-warning.ms-6.mt-2.mb-2(href="/register/") Şimdi Kayıt Ol
               br
-              a.btn.btn-info.ms-6.mt-2.mb-2(href="#nasilkullanirim") Nasıl kullanacağını öğren
+              a.btn.btn-info.ms-6.mt-2.mb-2(href="/howto/") Nasıl kullanacağını öğren
   .row.mt-2
     .col-md-6
       .card
@@ -61,6 +61,3 @@ block content
             br
           a(href=statistics.activegroup) en aktif grup
           br
-    unless is_authenticated
-      .row.mt-2#nasilkullanirim
-        include frontpageinfo.pug
