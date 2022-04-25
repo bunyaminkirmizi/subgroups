@@ -6,7 +6,6 @@ nav.navbar.sticky-top.navbar-expand-lg.navbar-light.bg-light.pt-1.pb-2
       
     button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
       span.navbar-toggler-icon
-    //- if is_authenticated
     if group
       .btn-group
         a.btn.btn-primary(href='/group/'+group.current.group_id)=group.current.group_name
@@ -36,12 +35,10 @@ nav.navbar.sticky-top.navbar-expand-lg.navbar-light.bg-light.pt-1.pb-2
                   button#filterdropdown.btn.btn-success.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false')
                     i.mt-1.fas.fa-filter
                     |  #{filter.name}
-
                 else
                   button#filterdropdown.btn.btn-outline-success.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false')
                       i.mt-1.fas.fa-filter
                       | 
-
               ul.dropdown-menu(aria-labelledby='filterdropdown')
                 li
                   a.dropdown-item(href="?filter=up&filtername=Yukarı Oylananlar") Yukarı oylananlar
@@ -54,19 +51,7 @@ nav.navbar.sticky-top.navbar-expand-lg.navbar-light.bg-light.pt-1.pb-2
                 li
                   a.dropdown-item(href="?filter=clear") Filtreyi Temizle
       .d-flex.ml-2.mb-0
-        if is_authenticated
-          
-          //- if group
-          //-   if group.info.is_owner  
-          //-     a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#groupsModalSm')
-          //-       i.mt-1.fas.fa-plus
-          //-     a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#postSendModal')
-          //-         i.mt-1.fas.fa-pen
-          //-   if group.info.is_participant
-          //-     a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#postSendModal')
-          //-       i.mt-1.fas.fa-pen
-              
-                      
+        if is_authenticated             
           .dropdown#dropdown_message_link.btn.btn-primary.me-2(href='messagebox' role='button' data-bs-toggle='dropdown' aria-expanded='false')
               i.mt-1.fas.fa-envelope
           ul.dropdown-menu.dropdown-menu-end(aria-labelledby='dropdown_message_link')
@@ -134,20 +119,18 @@ nav.navbar.sticky-top.navbar-expand-lg.navbar-light.bg-light.pt-1.pb-2
           
 
           .btn-group
-            button.btn.btn-primary.dropdown-toggle(type='button' data-bs-toggle='dropdown' data-bs-display='static' aria-expanded='false')=user.username
+            button.btn.dropdown-toggle.p-0(type='button' data-bs-toggle='dropdown' data-bs-display='static' aria-expanded='false')
+              img.rounded-circle.p-0(src='/profile_photos/'+user.profile_photo_path height="27" width="27" alt='profile photo nav' loading="lazy")
             ul.dropdown-menu.dropdown-menu-lg-end
               li
-                a.dropdown-item(href="/user/profile") kullanıcı sayfası
+                a.dropdown-item(href="/user/profile")
+                  i.fas.fa-user.me-2
+                  |  Kullanıcı sayfası
+              hr.m-1
               li
-                a.dropdown-item(href="/logout/") çıkış yap
-
-          //- .dropdown
-            //- button#dropdownMenuButton1.btn.btn-primary.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false')=user.username
-            //- ul.dropdown-menu.dropdown-menu-left(aria-labelledby='dropdownMenuButton1')
-
-
-
-          //- a.btn.btn-danger.dropdown-toggle(href="/logout/")=user.username
+                a.dropdown-item(href="/logout/")
+                  i.fas.fa-times-circle.me-2
+                  |  Çıkış yap
         else
           if title == "login"
             a.btn.btn-primary.me-2(href='/login') Giriş Yap
@@ -178,17 +161,10 @@ if group
   #postSendModal.modal(tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
     .modal-dialog.modal-lg
       .modal-content
-        //- form(action='/upload/filename' method='post' enctype='multipart/form-data')
-        //- input(type='submit')
-        //-   label.form-label(for='formFileMultiple') Dosyalarınızı buradan yükleyebilirsiniz
-        //-     //- input#myFile(type='file' name="filename" multiple='')
-
         .modal-header
-        
           h5#groupsModalSmLabel.modal-title.h4 Gönderi gönder
           button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
         .modal-body
-          //- form.row.g-3(action='/upload/filenameeessees' method='post')
           input#myFile.form-control.md-3.mb-2(type='file' accept="image/*" name='filename')
           div#uploaded_files.container.text-center
           form#sendpostform.row.g-3(action='/post/new/' method='post')
@@ -199,17 +175,9 @@ if group
   #deleteGroupModal.modal(tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
     .modal-dialog.modal-md
       .modal-content
-        //- form(action='/upload/filename' method='post' enctype='multipart/form-data')
-        //- input(type='submit')
-        //-   label.form-label(for='formFileMultiple') Dosyalarınızı buradan yükleyebilirsiniz
-        //-     //- input#myFile(type='file' name="filename" multiple='')
-
         .modal-header
-        
           h5#groupsModalSmLabel.modal-title.h4 Emin misiniz?
-          //- button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
         .modal-body
-          //- form.row.g-3(action='/upload/filenameeessees' method='post')
           .modal-text
             strong=group.current.group_name
             |  adlı grubu silmek üzeresiniz
@@ -239,4 +207,14 @@ if group
                   codelement.innerHTML = 'title'
                   const element = document.createElement('li');
                 }
+  #changeBannerModal.modal(tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          h5#groupsModalSmLabel.modal-title.h4 Kapak fotoğrafını değiştir
+          button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+        .modal-body
+          form#changebannerform.row.g-3(action='/group/changebanner/'+group.current.group_id method='post' enctype="multipart/form-data")
+            input#bannerFile.form-control.md-3.mb-2(type='file' accept="image/*" name='group_banner_file' required="required")
+            button.btn.btn-outline-success.float-end(type='submit') Değiştir
             

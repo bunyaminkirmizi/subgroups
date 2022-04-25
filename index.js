@@ -5,6 +5,8 @@ const multer  = require('multer')
 
 const upload = multer({ dest: './public/images/',limits: { fileSize: 1000000*90 } })
 const banner_upload = multer({ dest: './public/group_banners/',limits: { fileSize: 1000000*90 } })
+const user_pp_upload = multer({ dest: './public/profile_photos/',limits: { fileSize: 1000000*90 } })
+
 require("dotenv").config();
 const app = express()
 app.use(session({
@@ -31,17 +33,79 @@ app.post('/upload/:filename', upload.single('filename'), (req, res) => {
   })
 })
 
-app.post('/upload_banner/:filename', upload.single('filename'), (req, res) => {
-  const group_id = 1;
+app.post('/group/changebanner/:group_id', banner_upload.single('group_banner_file'), (req, res) => {
+  const group_id = req.params.group_id
   let filepath = null
   if(req.file){
-    console.log("file uploaded"+req.file.filename)
-    filepath = "/images/"+req.file.filename
+    console.log(req.file)
+    groups.add_banner(group_id,req.file.filename)
   }else{
     console.log("req.file didn't worked");
   }
   res.redirect('/group/'+group_id)
 })
+app.post('/user/changepp/:user_id', user_pp_upload.single('userpp'), async (req, res) => {
+  const user_id = req.session.user.user_id
+  let filepath = null
+  if(req.file){
+    const pp_path = req.file.filename
+    await users.add_profile_photo(user_id,pp_path)
+    //update session for profile photo
+    req.session.user = await get_user_by_id(user_id)
+  }else{
+    console.log("req.file didn't worked");
+  }
+  res.redirect('/user/profile/')
+})
+// var storage = multer.diskStorage(
+//   {
+//       destination: './public/group_banners/',
+//       filename: function ( req, file, cb ) {
+//           //req.body is empty...
+//           //How could I get the new_file_name property sent from client here?
+//           cb( null, file.originalname+ '-' + Date.now()+".jpg");
+//       }
+//   }
+// );
+
+// var upload_banner = multer( { storage: storage } );
+// function pp( request, response ) {
+
+//   response.json( { message: "success" } );
+
+// }
+// app.route( '/group/changebanner/:group_id' )
+//   .post( upload_banner.single( 'group_banner_file' ), pp );
+
+
+// app.post('/group/changebanner/:group_id', upload.single('group_banner_file'), (req, res) => {
+  
+//   let filepath = null
+//   const group_id = req.params.group_banner_file
+//   console.log("reqbodygroupid------>>>>",group_id)
+//   if(req.file){
+//     console.log("file uploaded"+req.params.group_id)
+//     filepath = "/group_banners/"+req.params.group_id
+//   }else{
+//     console.log("req.file didn't worked");
+//   }
+//   res.send({
+//     "filename": group_id,
+//     "filepath": filepath
+//   })
+// })
+
+// app.post('/upload_banner/:filename', banner_upload.single('filename'), (req, res) => {
+//   const group_id = 1;
+//   let filepath = null
+//   if(req.file){
+//     console.log("file uploaded"+req.file.filename)
+//     filepath = "/images/"+req.file.filename
+//   }else{
+//     console.log("req.file didn't worked");
+//   }
+//   res.redirect('/group/'+group_id)
+// })
 
 const user = require("./router/user");
 const post = require("./router/post");
@@ -58,8 +122,12 @@ const posts = require('./db/posts')
 const { TreeNode } = require('./db/tree')
 const stats = require('./db/stats')
 const { info } = require('console')
-const { is_authanticated } = require('./db/auth')
+const { is_authanticated, authentication_required } = require('./db/auth')
 const { redirect } = require('express/lib/response')
+const comments = require('./db/comments')
+const { get_user_by_id } = require('./db/users')
+const users = require('./db/users')
+const { last_posts_from_public_groups } = require('./db/posts')
 
 app.use(express.urlencoded({ extended: true })); //Used fore parsing body elements
 app.set('trust proxy', 1) // trust first proxy
@@ -67,7 +135,20 @@ app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', async (req, res) => {
-
+  if(auth.is_authanticated(req.session)){
+    const user_id = req.session.user.user_id
+    res.render('pages/userhome', {
+      title: 'subgroups',
+      user:req.session.user,
+      is_authenticated:  true,
+      groups_user_joined: await groups.get_user_participant_groups(user_id),
+      posts_from_user_joined_groups: await posts.get_user_joined_group_posts(user_id),
+      user_owned_groups: await groups.get_user_owned_groups(user_id),
+      last_posts_from_public_groups: await posts.last_posts_from_public_groups(5),
+      new_groups: await groups.new_groups(5)
+     })
+     return;
+  }
   console.log("entered homepage")
   res.render('pages/home', {
     title: 'subgroups',
@@ -82,11 +163,32 @@ app.get('/', async (req, res) => {
   )
   
 app.get('/user/profile',auth.authentication_required, async (req, res) => {
-
+  const user_id = req.session.user.user_id
+  console.log(req.session.user)
   res.render('pages/profile', {
     title: 'subgroups',
     user:req.session.user,
+    profile_user:await users.get_user_by_id(user_id),
     is_authenticated: auth.is_authanticated(req.session),
+    last_posts: await posts.last_posts_by_user(user_id,5),
+    last_comments: await comments.last_comments_by_user(user_id,5),
+    user_post_count: await posts.user_post_count(user_id),
+    user_comment_count: await comments.user_comment_count(user_id)
+  })
+})
+
+app.get('/user/:user_id',auth.authentication_required, async (req, res) => {
+  const user_id = req.params.user_id
+  res.render('pages/profile', {
+    title: 'subgroups',
+    user:req.session.user,
+    profile_user:await get_user_by_id(user_id),
+    is_authenticated: auth.is_authanticated(req.session),
+    last_posts: await posts.last_posts_by_user(user_id,5),
+    last_comments: await comments.last_comments_by_user(user_id,5),
+    user_post_count: await posts.user_post_count(user_id),
+    user_comment_count: await comments.user_comment_count(user_id),
+
   })
 })
 
@@ -108,18 +210,25 @@ app.get('/group/delete/:group_id',auth.authentication_required,group_ownership_r
 
 app.get('/group/:group_id', async (req, res) => {
   const group_id = req.params.group_id
+  if(!(await groups.get_group(group_id))){
+    //if group does not exist
+    res.redirect('/')
+    return;
+  }
   let group_info = {
     is_participant: false,
     is_owner: false,
-    banner: true
+    banner: true,
+    status:(await groups.get_status(group_id))
   }
   // console.log("satuususuusususu",)
   if(auth.is_authanticated(req.session)){
     const user_id = req.session.user.user_id
     group_info = {
+      
       is_participant: await groups.is_participant(user_id,group_id),
       is_owner: await groups.is_owner(user_id,group_id),
-      banner: true,
+      banner: false,
       status:(await groups.get_status(group_id))
     }
     console.log("group_info",group_info)

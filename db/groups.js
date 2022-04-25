@@ -129,11 +129,9 @@ async function is_participant(user_id,group_id) {
 	  }
 	}
 
-
-
 async function get_group(group_id) {
 	let group = null
-	const sqltext = 'select group_id, group_name,user_id from groups where group_id=$1;'
+	const sqltext = 'select group_id, group_name,user_id,bannerfilename,group_info from groups where group_id=$1;'
 	const values = [group_id]
 	try {
 		group = (await connect.pool.query(sqltext, values)).rows[0];
@@ -213,6 +211,52 @@ async function get_status(group_id) {
 	const values = [group_id]
 	return (await connect.pool.query(sqltext, values)).rows[0].is_public
 }
+
+function add_banner(group_id,banner_filename) {
+	const sqltext = "UPDATE groups SET bannerfilename = $2 WHERE group_id = $1;"
+	const values = [group_id,banner_filename]
+	connect.pool.query(sqltext,values,
+		(err)=>console.log(err)
+		)
+	}
+
+function add_info(group_id,info_text) {
+	const sqltext = "UPDATE groups SET group_info = $2 WHERE group_id = $1;"
+	const values = [group_id,info_text]
+	connect.pool.query(sqltext,values,
+		(err)=>console.log(err)
+		)
+	}
+
+function del_banner(group_id) {
+	add_banner(group_id,"")
+}
+
+function del_info(group_id) {
+	add_info(group_id,"")
+}
+
+async function get_user_participant_groups(user_id) {
+	const sqltext = `SELECT *
+	FROM (select * from group_participants where user_id = $1) as usergroups
+	LEFT JOIN groups
+	ON usergroups.group_id = groups.group_id;`
+	const values = [user_id]
+	return (await connect.pool.query(sqltext,values)).rows
+}
+
+async function get_user_owned_groups(user_id) {
+	const sqltext = `SELECT *
+	FROM groups
+	where user_id = $1;`
+	const values = [user_id]
+	return (await connect.pool.query(sqltext,values)).rows
+}
+async function new_groups(limit) {
+	const sqltext = `select * from groups WHERE group_create_timestamp > current_date - interval '7 days' limit $1;`
+	const values = [limit]
+	return (await connect.pool.query(sqltext,values)).rows
+}
 module.exports = {
 	create_group:create_group,
 	delete_group:delete_group,
@@ -229,5 +273,12 @@ module.exports = {
 	get_parent:get_parent,
 	make_group_public:make_group_public,
 	make_group_private:make_group_private,
-	get_status:get_status
+	get_status:get_status,
+	add_banner:add_banner,
+	add_info:add_info,
+	del_baner:del_banner,
+	del_info:del_info,get_user_participant_groups:get_user_participant_groups,
+	get_user_owned_groups:get_user_owned_groups,
+	new_groups:new_groups
+
 }

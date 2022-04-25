@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS users (
   email varchar(100) UNIQUE NOT NULL,
   password_hash varchar(250) NOT NULL,
   register_timestamp timestamp NOT NULL,
-  email_activation_pass TEXT NOT NULL
+  email_activation_pass TEXT NOT NULL,
+  profile_photo_path varchar(250)
 );
 
 CREATE TABLE IF NOT EXISTS messages (
@@ -22,7 +23,8 @@ CREATE TABLE IF NOT EXISTS groups (
   group_name varchar(30),
   is_public boolean DEFAULT TRUE,
   group_create_timestamp timestamp,
-  -- group_info TEXT
+  group_info TEXT,
+  bannerfilename varchar(150)
 );
 
 CREATE TABLE IF NOT EXISTS posts (
@@ -55,7 +57,7 @@ CREATE TABLE IF NOT EXISTS vote(
 CREATE TABLE IF NOT EXISTS comment (
   comment_id BIGSERIAL PRIMARY KEY,
   owner_id int NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-  post_id int NOT NULL REFERENCES groups(group_id) ON DELETE CASCADE,
+  post_id int NOT NULL REFERENCES posts(post_id) ON DELETE CASCADE,
   body TEXT NOT NULL,
   send_timestamp timestamp
 );
@@ -69,7 +71,7 @@ CREATE TABLE IF NOT EXISTS group_participants (
 --create admin user
 INSERT INTO users(username,email,password_hash,register_timestamp,email_activation_pass)values(
   'admin',
-  'admin@subgrops.com',
+  'admin@subgroups.com',
   '$2b$12$RkJ/71EQvgoAkLRORmp1LOw5wctuWQ.XpKlg25hid6pedTwJpXjGK',current_timestamp,FALSE)
   ON CONFLICT DO NOTHING;
 

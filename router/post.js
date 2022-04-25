@@ -5,6 +5,8 @@ const auth = require("../db/auth");
 const posts = require("../db/posts");
 const groups = require("../db/groups");
 const votes = require("../db/votes");
+const comments = require("../db/comments");
+const { del_baner } = require("../db/groups");
 
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
@@ -32,6 +34,14 @@ router.post('/new/',auth.authentication_required, async (req, res) => {
   
   })
 
+router.post('/sendcomment/:post_id',auth.authentication_required, async (req, res) => {
+	const post_id = req.params.post_id
+	const comment_body = req.body.commenttext
+	const user_id = req.session.user.user_id
+	comments.add_comment(user_id,post_id,comment_body)
+
+	res.redirect('/post/detail?post_id='+post_id)
+})
 router.get('/detail', async (req, res) => {
 	const post_id = req.query.post_id
 	const post = await posts.get_post_with_user_given_vote(post_id,req.session.user)
@@ -40,7 +50,6 @@ router.get('/detail', async (req, res) => {
 		 return;}
 	const group_id = post.group_id
 	const current_group = await groups.get_group(group_id)
-	
 	if(current_group != undefined){
 		const g_dropdown = {
 		current:current_group,
@@ -52,7 +61,8 @@ router.get('/detail', async (req, res) => {
 		user:req.session.user,
 		is_authenticated: auth.is_authanticated(req.session),
 		group:g_dropdown,
-		post:post
+		post:post,
+		comments: await comments.get_comment_by_post(post_id)
 		})
 		return;
 		}

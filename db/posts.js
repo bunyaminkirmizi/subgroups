@@ -80,8 +80,9 @@ async function get_post_with_user_given_vote(post_id,authenticated_user) {
 		let row = res.rows[0]
 		if(row !=undefined){
 			row['votecount'] = await votes.get_vote_count(post_id)
-		
-		row['sender'] = (await users.get_user_by_id(row.user_id)).username
+		const sender_user = (await users.get_user_by_id(row.user_id))
+		row['sender'] = sender_user.username
+		row['sender_photo'] = sender_user.profile_photo_path
 
 		}
 		if (authenticated_user){
@@ -146,7 +147,9 @@ async function get_post_by_group(group_id,authenticated_user,filter) {
 		for (let index = 0; index < group_posts.length; index++) {
 			let element = group_posts[index] 
 			element['votecount'] = await votes.get_vote_count(element.post_id);
-			element['sender'] = (await users.get_user_by_id(element.user_id)).username
+			const senderuser  = (await users.get_user_by_id(element.user_id))
+			element['sender'] = senderuser.username
+			element['sender_photo'] = senderuser.profile_photo_path
 			element['body'] = element['body'].substring(0,605)
 			if(authenticated_user){
 				element['user_given_vote'] = await votes.get_vote_type(authenticated_user.user_id, element.post_id)
@@ -181,8 +184,53 @@ async function get_post_downvote_count(group_id) {
 		}
 	return null
 	}
+async function last_posts_by_user(user_id,limit) {
+	const sqltext = 'SELECT * FROM posts WHERE user_id =$1 order by send_timestamp desc limit $2'
+	const values = [user_id,limit]
+	try {
+		return (await connect.pool.query(sqltext, values)).rows
+		} catch (err) {
+		console.log(err.stack)
+		}
+	return null
+	}
 
+async function user_post_count(user_id) {
+	const sqltext = 'SELECT COUNT(*) FROM posts WHERE user_id =$1'
+	const values = [user_id]
+	try {
+		return (await connect.pool.query(sqltext, values)).rows[0]
+		} catch (err) {
+		console.log(err.stack)
+		}
+	return null
+	}
 
+async function get_user_joined_group_posts(user_id) {
+	const sqltext = `SELECT users.username,users.user_id,users.profile_photo_path,userposts.header,userposts.body,userposts.send_timestamp,userposts.post_id from users
+	RIGHT JOIN (SELECT *
+	FROM (select group_id from group_participants where user_id = $1) as usergroups
+	LEFT JOIN posts 
+	ON usergroups.group_id = posts.group_id) as userposts
+	ON userposts.user_id = users.user_id;`
+	const values = [user_id]
+	try {
+		return (await connect.pool.query(sqltext, values)).rows
+		} catch (err) {
+		console.log(err.stack)
+		}
+	return null
+	}
+async function last_posts_from_public_groups(limit) {
+	const sqltext = 'SELECT * FROM posts order by send_timestamp desc limit $1;'
+	const values = [limit]
+	try {
+		return (await connect.pool.query(sqltext, values)).rows
+		} catch (err) {
+		console.log(err.stack)
+		}
+	return null
+	}
 module.exports = {
 	delete_post:delete_post,
 	update_post:update_post,
@@ -191,28 +239,10 @@ module.exports = {
 	get_post_by_group:get_post_by_group,
 	upvote:upvote,
 	downvote:downvote,
-	get_post_with_user_given_vote:get_post_with_user_given_vote
+	get_post_with_user_given_vote:get_post_with_user_given_vote,
+	last_posts_by_user:last_posts_by_user,
+	user_post_count:user_post_count,
+	get_user_joined_group_posts:get_user_joined_group_posts,
+	last_posts_from_public_groups:last_posts_from_public_groups
+
 }
-
-
-/**
- *
- * SELECT 
-   posts.post_id, 
-   count(upvotes)
-FROM 
-   posts
-RIGHT JOIN (select * from vote where vote.vote_type=True) as upvotes
-   ON posts.post_id = upvotes.post_id
-GROUP BY posts.post_id;
-    
-/**
-SELECT 
-groupposts.post_id,groupposts.user_id,groupposts.group_id,groupposts.header,groupposts.body,groupposts.send_timestamp,COALESCE(sum(CASE WHEN vote.vote_type THEN 1 ELSE -1 END),-1)
-FROM 
-(select * from posts where group_id=4) as groupposts
-LEFT JOIN vote
-ON groupposts.post_id = vote.post_id
-GROUP BY groupposts.post_id,groupposts.user_id,groupposts.group_id,groupposts.header,groupposts.body,groupposts.send_timestamp
-order by coalesce;
-*/

@@ -1,0 +1,8 @@
+mixin group_thumb(group)
+  .card.bg-dark.text-white.thumbnailbanner.overflow-hidden.m-2
+    img.card-img(src='/group_banners/'+group.bannerfilename, alt='Card image')
+    .card-img-overlay
+      h5.card-title=group.group_name
+      p.card-text=group.group_info
+      p.card-text=group.create_timestamp
+      a.stretched-link(href='/group/'+group.group_id)

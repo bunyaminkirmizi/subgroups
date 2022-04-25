@@ -5,7 +5,6 @@ block content
     .col-lg-10.col-xl-9.mx-auto.mt-1
       .card.flex-row.my-2.border-0.shadow.rounded-3.overflow-hidden
         .card-img-left-register.d-none.d-md-flex
-          // Background image for card set in CSS!
         .card-body.p-4.p-sm-5
           h5.card-title.text-center.mb-5.fw-light.fs-5 Kayıt ol
           form(action='' method='post')
@@ -29,17 +28,3 @@ block content
               | Giri&scedil;
               | yap&imath;n.
             a.d-block.text-center.mt-2.small(href='/getnewpassword/') &Scedil;ifremi unuttum
-
-    //- .row
-    //-     .col-md-4.offset-md-4
-    //-         .login-form.bg-light.mt-4.p-4
-    //-             form.row.g-3(action='' method='post')
-    //-                 input.form-control(type='text' minLength="5" maxLength="15" name='username' placeholder='Kullanıcı adı')
-    //-                 input.form-control(type='email' name='email' placeholder='E-posta')
-    //-                 input.form-control(type='password' minLength="8" maxLength="15" name='password' placeholder='Parola')
-    //-                 input.form-control(type='password' minLength="8" name='passwordagain' placeholder='Parolanızı yeniden giriniz')
-    //-                 button.btn.btn-outline-success.float-end(type='submit') Kayıt ol
-    //-             hr.mt-4
-    //-             p.text-center.mb-0
-    //-             | Zaten bir hesabınız var mı? 
-    //-             a(href='/login/') Giriş yapın

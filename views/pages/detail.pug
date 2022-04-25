@@ -1,46 +1,64 @@
 extends ../base.pug
 block content
-  .card.mb-3.button-to-the-top
-    .row.g-0
-      .col-md-2.text-center.mt-2
-        if is_authenticated
-          button.btn.vote_buttons_no_focus(onclick="giveupvote("+post.post_id+")")
-            if post.user_given_vote
-              svg.bi.bi-arrow-up.upvoted(id="arrowup"+post.post_id xmlns='http://www.w3.org/2000/svg' font-weight='bold' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
-                path(fill-rule='evenodd' d='M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z')
-            else
-              svg.bi.bi-arrow-up(id="arrowup"+post.post_id xmlns='http://www.w3.org/2000/svg' font-weight='bold' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
-                path(fill-rule='evenodd' d='M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z')
+  .container
+    .card.mb-3.button-to-the-top.mt-2
+      .row.g-0
+        .col-md-2.text-center.mt-2
+          a.mt-2.mb-1(href='/user/'+post.user_id)
+            img.rounded-circle.p-0(src='/profile_photos/'+post.sender_photo height='60' width='60' alt='profile photo nav' loading='lazy')
+            .pt-1.pb-1.fluid=post.sender
+          if is_authenticated
+        
+            button.btn.vote_buttons_no_focus(onclick="giveupvote("+post.post_id+")")
+              if post.user_given_vote
+                svg.bi.bi-arrow-up.upvoted(id="arrowup"+post.post_id xmlns='http://www.w3.org/2000/svg' font-weight='bold' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
+                  path(fill-rule='evenodd' d='M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z')
+              else
+                svg.bi.bi-arrow-up(id="arrowup"+post.post_id xmlns='http://www.w3.org/2000/svg' font-weight='bold' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
+                  path(fill-rule='evenodd' d='M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z')
 
-          h4(id="vc"+post.post_id)=post.votecount
-          button.btn.vote_buttons_no_focus(onclick="givedownvote("+post.post_id+")")
-            if post.user_given_vote == undefined
+            h4(id="vc"+post.post_id)=post.votecount
+            button.btn.vote_buttons_no_focus(onclick="givedownvote("+post.post_id+")")
+              if post.user_given_vote == undefined
+                  svg.bi.bi-arrow-down(id="arrowdown"+post.post_id xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
+                    path(fill-rule='evenodd' d='M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z')
+              else if post.user_given_vote
                 svg.bi.bi-arrow-down(id="arrowdown"+post.post_id xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
                   path(fill-rule='evenodd' d='M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z')
-            else if post.user_given_vote
-              svg.bi.bi-arrow-down(id="arrowdown"+post.post_id xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
-                path(fill-rule='evenodd' d='M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z')
-            else
-                svg.bi.bi-arrow-down.downvoted(id="arrowdown"+post.post_id xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
-                  path(fill-rule='evenodd' d='M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z')
-        else
-          h4.mt-5(id="vc"+post.post_id)=post.votecount
-        br
-        if user
-          if post.user_id == user.user_id
-            a.btn.btn-outline-danger.delete-button.mt-2(href="/post/delete?post_id="+post.post_id)
-              i.fa.fa-trash
-            |  
-            a.btn.btn-outline-info.mt-2(type='button' data-bs-toggle='modal' data-bs-target='#updatePostModal'+post.post_id)
-              i.fa.fa-edit
-                        
-        .text-secondary #{post.send_timestamp.toLocaleString("en-GB", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})}
-        a.btn.pt-1.pb-1(href='#')=post.sender
-      .col-md-8
-        //- a.stretched-link(href='/post/detail?post_id='+post.post_id)
-        .card-body
-          h5.card-title=post.header
-          p#markdown_detailed_text.card-text=post.body
+              else
+                  svg.bi.bi-arrow-down.downvoted(id="arrowdown"+post.post_id xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewbox='0 0 16 16')
+                    path(fill-rule='evenodd' d='M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z')
+          else
+            h4.mt-5(id="vc"+post.post_id)=post.votecount
+          br
+          if user
+            if post.user_id == user.user_id
+              a.btn.btn-outline-danger.delete-button.mt-2(href="/post/delete?post_id="+post.post_id)
+                i.fa.fa-trash
+              |  
+              a.btn.btn-outline-info.mt-2(type='button' data-bs-toggle='modal' data-bs-target='#updatePostModal'+post.post_id)
+                i.fa.fa-edit
+          .text-secondary #{post.send_timestamp.toLocaleString("tr-TR", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})}
+        .col-md-8
+          .card-body
+            h5.card-title=post.header
+            p#markdown_detailed_text.card-text=post.body
+        
+    if is_authenticated
+      div
+        form(action='/post/sendcomment/'+post.post_id method='post')
+          textarea.form-control(name="commenttext" style='height: 50px;' required="required" placeholder="Bir yorum yazın")
+          button.btn.btn-md.btn-outline-success.mt-2.float-end(type='submit')  Yorum Yap
+    div#comments.mt-5
+      each comment in comments
+        .card.mb-1.mt-2
+          
+          .card-body
+            blockquote.blockquote.mb-0
+              p=comment.body
+              
+          .card-header='user_id' + comment.owner_id + ' '+ comment.send_timestamp.toLocaleString("tr-TR", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})
+        
     .modal(id='updatePostModal'+post.post_id tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
       .modal-dialog.modal-lg
         .modal-content
@@ -54,3 +72,4 @@ block content
               input#hidden2(type='hidden' name='group_id' value=post.group_id)
               button.btn.btn-outline-info.float-end(type='submit') Update
     
+      

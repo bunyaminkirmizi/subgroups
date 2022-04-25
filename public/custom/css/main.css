@@ -1,3 +1,24 @@
+body {
+	background-color: #eee;
+}
+
+/* .profile-photo-pen {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+} */
+
+img {
+	position: relative;
+}
+
+.profile-photo:hover {
+	opacity: 0.5;
+	cursor: pointer;
+}
+
 .height-responsive {
 	height: 100% !important;
 }
@@ -63,6 +84,10 @@ a:active {
 	height: 150px;
 }
 
+.thumbnailbanner {
+	height: 100px;
+}
+
 .fixedcardsizefrontpagerow {
 	height: 250px;
 }
@@ -76,6 +101,10 @@ a:active {
 .login-container {
 	background: #007bff;
 	background: linear-gradient(to right, #570279, #33AEFF);
+}
+
+.icon-big {
+	font-size: 15em;
 }
 
 .card-img-left-register {
@@ -97,6 +126,14 @@ a:active {
 	letter-spacing: 0.05rem;
 	padding: 0.75rem 1rem;
 }
+
+/**
+profile photo image
+*/
+.ppimage:hover {
+	opacity: 0.5;
+}
+
 
 /* body {
 	background: linear-gradient(to bottom, #0066ff 0%, #993366 100%);

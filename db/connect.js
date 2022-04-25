@@ -11,14 +11,14 @@ const pool = new Pool({
 	ssl:false
   })
 
-//open production
-// try {
-// const data = fs.readFileSync('db/init/tables.sql', 'utf8')
+// open production
+try {
+const data = fs.readFileSync('db/init/tables.sql', 'utf8')
 
-// pool.query(data)
-// } catch (err) {
-// console.error(err)
-// }
+pool.query(data)
+} catch (err) {
+console.error(err)
+}
 
 async function run_query_select_rows(query, values){
 	try {

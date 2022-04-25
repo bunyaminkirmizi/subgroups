@@ -1,10 +1,7 @@
 extends ../base.pug
 
 block content
-  
-
   if is_authenticated
-      
       a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#groupsModalSm')
         i.mt-1.fas.fa-plus
   unless is_authenticated
@@ -55,8 +52,6 @@ block content
           br
           strong=statistics.newgroups
           |  yeni grup oluşturuldu
-          //- br
-          //- a(href='text center') 
     .col-md-6       
       .card
         h5.card-header='Haftanın Enleri'

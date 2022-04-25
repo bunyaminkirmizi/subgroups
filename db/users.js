@@ -42,11 +42,22 @@ async function delete_user(user_id) {
 		console.log(err.stack)
 		}
 	}
+async function add_profile_photo(user_id,ppath) {
+	// console.log(ppath,user_id)
+	const sqltext = 'UPDATE users SET profile_photo_path = $2 WHERE user_id = $1;'
+	const values = [user_id,ppath]
+	try {
+		return await connect.pool.query(sqltext, values)
+		} catch (err) {
+		console.log(err.stack)
+		}
+	}
 
 module.exports = {
 	add_user:add_user,
 	get_user_by_username:get_user_by_username,
 	get_user_by_id:get_user_by_id,
-	delete_user:delete_user
+	delete_user:delete_user,
+	add_profile_photo:add_profile_photo
 
 }
