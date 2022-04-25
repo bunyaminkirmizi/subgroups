@@ -57,55 +57,6 @@ app.post('/user/changepp/:user_id', user_pp_upload.single('userpp'), async (req,
   }
   res.redirect('/user/profile/')
 })
-// var storage = multer.diskStorage(
-//   {
-//       destination: './public/group_banners/',
-//       filename: function ( req, file, cb ) {
-//           //req.body is empty...
-//           //How could I get the new_file_name property sent from client here?
-//           cb( null, file.originalname+ '-' + Date.now()+".jpg");
-//       }
-//   }
-// );
-
-// var upload_banner = multer( { storage: storage } );
-// function pp( request, response ) {
-
-//   response.json( { message: "success" } );
-
-// }
-// app.route( '/group/changebanner/:group_id' )
-//   .post( upload_banner.single( 'group_banner_file' ), pp );
-
-
-// app.post('/group/changebanner/:group_id', upload.single('group_banner_file'), (req, res) => {
-  
-//   let filepath = null
-//   const group_id = req.params.group_banner_file
-//   console.log("reqbodygroupid------>>>>",group_id)
-//   if(req.file){
-//     console.log("file uploaded"+req.params.group_id)
-//     filepath = "/group_banners/"+req.params.group_id
-//   }else{
-//     console.log("req.file didn't worked");
-//   }
-//   res.send({
-//     "filename": group_id,
-//     "filepath": filepath
-//   })
-// })
-
-// app.post('/upload_banner/:filename', banner_upload.single('filename'), (req, res) => {
-//   const group_id = 1;
-//   let filepath = null
-//   if(req.file){
-//     console.log("file uploaded"+req.file.filename)
-//     filepath = "/images/"+req.file.filename
-//   }else{
-//     console.log("req.file didn't worked");
-//   }
-//   res.redirect('/group/'+group_id)
-// })
 
 const user = require("./router/user");
 const post = require("./router/post");
