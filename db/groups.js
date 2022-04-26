@@ -19,10 +19,12 @@ const { TreeNode } = require('./tree');
 
 async function create_group(user_id,group_name) {
 	const sqltext="INSERT INTO groups(user_id,group_name,group_create_timestamp) values($1,$2,current_timestamp) RETURNING group_id"
+	
 	const values = [user_id, group_name]
 	let added_group_id = null
 	try {
 		added_group_id = (await connect.pool.query(sqltext, values)).rows[0].group_id
+		join_group(user_id,added_group_id)
 	  } catch (err) {
 		console.log(err.stack)
 	  }

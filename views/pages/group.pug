@@ -111,10 +111,22 @@ block content
         .card-body
          p.mt-2
           strong Hakkında
-         p grubun hakkinda genel bilgiler veren bir kisimdir burasi ve istenilen buraya yazilabilir isteyen istedigini yazabilir
-         p bu grupta x adet kullanici vardir
-         p bu grubun sahibi x kullanicisidir
-
+         p=group.current.group_info
+         //- p bu grupta x adet kullanici vardir
+         //- p bu grubun sahibi x kullanicisidir
+         if group.info.is_owner
+           .btn.btn-outline-warning.mt-2.me-2(type='button' data-bs-toggle='modal' data-bs-target='#changeGroupAbout')
+                    i.mt-1.fas.fa-pencil
+                    |  açıklamayı değiştir
+         #changeGroupAbout.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+          .modal-dialog
+            .modal-content
+              h5#exampleModalLabel.modal-header Düzenle
+              .modal-body
+                form(action='/group/changeabout/'+group.current.group_id method='post')
+                  .mb-3
+                    textarea#message-text.form-control(name="groupabouttext" placeholder='Grubunuzun açıklamasını düzenleyin')
+                    button.btn.btn-outline-success.mt-2.float-end(type='submit') Gönder
          if group
           if group.info
             unless group.info.is_owner
@@ -128,6 +140,7 @@ block content
                 .btn.btn-outline-danger.mt-2.me-2(type='button' data-bs-toggle='modal' data-bs-target='#deleteGroupModal')
                   i.mt-1.fas.fa-trash
                   |  grubu sil
+                
                 //- h1=JSON.stringify(group.info) 
                 if group.info.status
                   

@@ -21,18 +21,21 @@ block content
                       input#bannerFile.form-control.md-3.mb-2(type='file' accept="image/*" name='userpp' required="required")
                       button.btn.btn-outline-success.float-end(type='submit') Değiştir
             h5.my-3=profile_user.username
-            p.text-muted.mb-1 Full Stack Developer adsfadsf jas Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+            p.text-muted.mb-1=profile_user.profile_about_text
             p.text-muted.mb-4=profile_user.register_timestamp.toLocaleString("tr-TR", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})
             .d-flex.justify-content-center.mb-2
               button.btn.btn-primary(type='button') Takip Et
               button.btn.btn-outline-primary.ms-2(type='button' style="height = 38px;" data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=profile_user.username)
                 i.fa-solid.fa-paper-plane
-        .card.mb-4.mb-lg-0
-          .card-body.p-0
-            ul.list-group.list-group-flush.rounded-3
-              li.list-group-item.d-flex.justify-content-between.align-items-center.p-3
-                i.fas.fa-users.fa-lg.text-secondary
-                p.mb-0 {x} takipçi
+              button.btn.btn-outline-primary.ms-2(type='button' style="height = 38px;" data-bs-toggle='modal' data-bs-target='#changeProfileAbout' data-bs-whatever=profile_user.username)
+                i.fa-solid.fa-pencil
+        //- open after follower feature added
+        //- .card.mb-4.mb-lg-0
+        //-   .card-body.p-0
+        //-     ul.list-group.list-group-flush.rounded-3
+        //-       li.list-group-item.d-flex.justify-content-between.align-items-center.p-3
+        //-         i.fas.fa-users.fa-lg.text-secondary
+        //-         p.mb-0 {x} takipçi
       .col-lg-8
         .card.mb-4
           .card-body
@@ -86,3 +89,12 @@ block content
                 textarea#message-text.form-control
           .modal-footer
             button.btn.btn-outline-success(type='button') Gönder
+  #changeProfileAbout.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+    .modal-dialog
+      .modal-content
+        h5#exampleModalLabel.modal-header Düzenle
+        .modal-body
+          form(action='/user/profile/changeabout/' method='post')
+            .mb-3
+              textarea#message-text.form-control(name="abouttext" placeholder='Kullanıcı sayfanızdaki yazıyı düzenleyin')
+              button.btn.btn-outline-success.mt-2.float-end(type='submit') Gönder

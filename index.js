@@ -94,8 +94,8 @@ app.get('/', async (req, res) => {
       is_authenticated:  true,
       groups_user_joined: await groups.get_user_participant_groups(user_id),
       posts_from_user_joined_groups: await posts.get_user_joined_group_posts(user_id),
-      user_owned_groups: await groups.get_user_owned_groups(user_id),
-      last_posts_from_public_groups: await posts.last_posts_from_public_groups(5),
+      user_owned_groups: await groups.get_user_owned_groups(
+        _from_public_groups(5),
       new_groups: await groups.new_groups(5)
      })
      return;
@@ -322,6 +322,20 @@ app.post('/login/', async (req, res) => {
       title: 'login',
       message: message
     })}
+  })
+
+app.post('/user/profile/changeabout/',auth.authentication_required, async (req, res) => {
+  const profileabouttext = req.body.abouttext
+  const user_id = req.session.user.user_id
+  users.add_about_text(user_id,profileabouttext)
+  res.redirect('/user/profile/')
+  })
+
+app.post('/group/changeabout/:group_id',auth.authentication_required, async (req, res) => {
+  const group_about_text = req.body.groupabouttext
+  const group_id = req.params.group_id
+  groups.add_info(group_id,group_about_text)
+  res.redirect('/group/'+group_id)
   })
 
 app.post('/register/', async (req, res) => {

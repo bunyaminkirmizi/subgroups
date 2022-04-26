@@ -15,36 +15,35 @@ html(lang="en")
     meta(charset='utf-8')
     meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
 
-  body
+  body.d-flex.flex-column.min-vh-100
     include nav.pug
     if message
-      #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
-        .modal-dialog
-          .modal-content
-            .modal-header
-              h5#exampleModalLabel.modal-title Modal title
-              button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
-            .modal-body
-              | ...
-            .modal-footer
-              button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
-              button.btn.btn-primary(type='button') Save changes
+      //- #exampleModal.modal.fade(aria-labelledby='exampleModalLabel' aria-hidden='true')
+      //-   .modal-dialog
+      //-     .modal-content
+      //-       .modal-header
+      //-         h5#exampleModalLabel.modal-title Modal title
+      //-         button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+      //-       .modal-body
+      //-         | ...
+      //-       .modal-footer
+      //-         button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+      //-         button.btn.btn-primary(type='button') Save changes
 
-
-      .script
-        let myModal = new bootstrap.Modal(document.getElementById('messagealert'), {});
-        myModal.show()
-      .alert.alert-dismissible.mt-2.me-2.ms-2(class="alert-"+message.type)
+      .alert.alert-dismissible.mt-2.me-2.ms-2.alert-fixed(class="alert-"+message.type)
         button.btn-close(type='button' data-bs-dismiss='alert')
         strong=message.header
         p=message.body
+      //- .script
+      //-   let myModal = new bootstrap.Modal(document.getElementById('messagealert'), {});
+      //-   myModal.show()
+      
       div.container.mt-2
     block content
-    footer.footer.mt-auto.py-3.bg-light
+    footer.footer.mt-auto.py-0.bg-light
       .container
-        center
-          span.text-muted bunyaminkirmizi Ⓒ tarafından oluşturuldu
-
+        span.text-muted.float-start bunyaminkirmizi Ⓒ tarafından oluşturuldu
+        a.text-muted.float-end.me-2(href='/about/') hakkında
 
     //- script(src='/bootstrap/js/jquery-3.6.0.slim.min')
     //- script(src='/bootstrap/js/popper.min.js')

@@ -4,23 +4,28 @@ const users = require("./users");
 const top_notifications = require("../top_notifications");
 
 function err_message(err_msg) {
-	return top_notifications.top_bar_message("Failed: ",err_msg,"danger")
+	return top_notifications.top_bar_message("BAŞARISIZ: ",err_msg,"danger")
 }
 
 function password_validation(password,passwordagain){
 	if(password.localeCompare(passwordagain)){
-		let e = "AUTH: passwords do not match"
+		let e = "Parolalar uyuşmuyor"
 		return [false,err_message(e)]
 	}
 	if(password.length<8){
-		let e = "AUTH: password can't be that short(<8)"
+		let e = "Şifreniz 8 karakterden kısa olamaz"
 		return [false,err_message(e)]
 	}else{
 		return [true,undefined]
 	}
 }
 
-function email_validation(email) {
+async function email_validation(email) {
+	if((await users.get_user_by_email(email)) != undefined){
+		let e = "Email '"+ email+"' zaten mevcut."
+		// console.log()
+		return [false,err_message(e)]
+	}
 	var emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
     if (!email)
 	
@@ -32,7 +37,7 @@ function email_validation(email) {
         
     var valid = emailRegex.test(email);
     if(!valid){
-		return [false,err_message("Invalid email")];
+		return [false,err_message("Geçersiz Email")];
 	}
         
     var parts = email.split("@");
@@ -46,17 +51,17 @@ function email_validation(email) {
 
 async function username_validation(username) {
 	if(username.length<4){
-		let e  = "Username can't be shorter than 5"
+		let e  = "Kullanıcı adı 5 karakterden kısa olamaz"
 		return [false,err_message(e)]
 	}
 	
 	if(username.length>15){
-		let e = "Username can't be longer than 15 char"
+		let e = "Kullanıcı adı 15 karakterden uzun olamaz"
 		return [false,err_message(e)]
 	}
 
 	if((await users.get_user_by_username(username)) != undefined){
-		let e = "User with username '"+ username+"' already exists"
+		let e = "Kullanıcı adı '"+ username+"' zaten mevcut."
 		// console.log()
 		return [false,err_message(e)]
 	}
@@ -66,7 +71,7 @@ async function username_validation(username) {
 async function register(username,email,password,passwordagain) {
 	const validation = {
 		password: password_validation(password,passwordagain),
-		email: email_validation(email),
+		email: await email_validation(email),
 		username: await username_validation(username)
 	}
 	if(!validation.username[0]){
@@ -83,23 +88,23 @@ async function register(username,email,password,passwordagain) {
 	}
 	const hashed_password = await bcrypt.hash(password, 12);
 	users.add_user(username,email,hashed_password)
-	return [true,top_notifications.top_bar_message("Success: ","Successfully registered. Now you can use log in page","success")]
+	return [true,top_notifications.top_bar_message("Başarılı: ","Başarılı bir şekilde kayıt oldunuz. Şimdi giriş sayfasını kullanabilirsiniz","success")]
 }
 async function authenticate(username,password,remember_me) {
 	var db_user = await users.get_user_by_username(username)
 
 	if(db_user == undefined){
-		let e = "There is no such user with name '"+username+"'";
+		let e = "Bu kullanıcı adında bir kullanıcı yok '"+username+"'";
 		console.error(e)
 		
 		return [undefined,err_message(e)]
 	}
 
 	if (await bcrypt.compare(password,db_user.password_hash)){
-		var success_message= username + " succesfully logged in"
+		var success_message= username + " Başarıyla giriş yapıldı"
 		return [db_user,undefined]
 	}else{
-		var e = "Wrong password!";
+		var e = "Yanlış parola!";
 		console.error(e)
 		return [undefined,err_message(e)]
 	}

@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash varchar(250) NOT NULL,
   register_timestamp timestamp NOT NULL,
   email_activation_pass TEXT NOT NULL,
-  profile_photo_path varchar(250)
+  profile_photo_path varchar(250),
+  profile_about_text TEXT
 );
 
 CREATE TABLE IF NOT EXISTS messages (

@@ -2,7 +2,6 @@
 //delete
 //update
 
-
 // CREATE TABLE IF NOT EXISTS posts (
 // 	post_id BIGSERIAL PRIMARY KEY,
 // 	user_id int NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
@@ -12,10 +11,8 @@
 // 	send_timestamp timestamp
 //   );
 
-const { user } = require('pg/lib/defaults');
 const connect = require('./connect');
 const users = require('./users');
-const { get_vote_count } = require('./votes');
 const votes = require('./votes');
 
 async function add_post(user_id,group_id,header,body) {
@@ -210,7 +207,7 @@ async function get_user_joined_group_posts(user_id) {
 	const sqltext = `SELECT users.username,users.user_id,users.profile_photo_path,userposts.header,userposts.body,userposts.send_timestamp,userposts.post_id from users
 	RIGHT JOIN (SELECT *
 	FROM (select group_id from group_participants where user_id = $1) as usergroups
-	LEFT JOIN posts 
+	INNER JOIN posts 
 	ON usergroups.group_id = posts.group_id) as userposts
 	ON userposts.user_id = users.user_id;`
 	const values = [user_id]
