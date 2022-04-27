@@ -24,9 +24,9 @@ block content
             p.text-muted.mb-1=profile_user.profile_about_text
             p.text-muted.mb-4=profile_user.register_timestamp.toLocaleString("tr-TR", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})
             .d-flex.justify-content-center.mb-2
-              button.btn.btn-primary(type='button') Takip Et
-              button.btn.btn-outline-primary.ms-2(type='button' style="height = 38px;" data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=profile_user.username)
-                i.fa-solid.fa-paper-plane
+              //- button.btn.btn-primary(type='button') Takip Et
+              //- button.btn.btn-outline-primary.ms-2(type='button' style="height = 38px;" data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=profile_user.username)
+              //-   i.fa-solid.fa-paper-plane
               button.btn.btn-outline-primary.ms-2(type='button' style="height = 38px;" data-bs-toggle='modal' data-bs-target='#changeProfileAbout' data-bs-whatever=profile_user.username)
                 i.fa-solid.fa-pencil
         //- open after follower feature added

@@ -350,10 +350,16 @@ app.post('/register/', async (req, res) => {
     message: register[1],
   })}
 )
+app.get('/about/', function(req, res){
+  res.render('pages/about', {
+    title: 'Hakkında',
+    is_authenticated:  auth.is_authanticated(req.session),
+    user:req.session.user,
+  })})
 
 app.get('*', function(req, res){
   res.render('pages/404', {
-    title: 'register',
+    title: 'Sayfa bulunamadı',
     is_authenticated:  auth.is_authanticated(req.session),
     user:req.session.user,
   })})
