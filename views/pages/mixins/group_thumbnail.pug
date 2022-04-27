@@ -1,6 +1,6 @@
 mixin group_thumb(group)
   .card.bg-dark.text-white.thumbnailbanner.overflow-hidden.m-2
-    img.card-img(src='/group_banners/'+group.bannerfilename, alt='Card image')
+    img.card-img(src='/group_banners/'+group.bannerfilename onerror="this.onerror=null; this.src='/assets/images/darkbackground.png'" alt='Card image')
     .card-img-overlay
       h5.card-title=group.group_name
       p.card-text=group.group_info

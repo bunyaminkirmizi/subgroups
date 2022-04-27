@@ -13,6 +13,7 @@
 //upvote post
 
 const connect = require('./connect');
+const { get_user_by_id } = require('./users');
 
 async function add_comment(owner_id,post_id,text_body) {
 	const sqltext = "insert into comment(owner_id,post_id,body,send_timestamp) values($1,$2,$3,current_timestamp);"
@@ -28,7 +29,13 @@ async function del_comment(comment_id){
 async function get_comment_by_post(post_id){
 	const sqltext = "select * from comment where post_id = $1 order by send_timestamp desc;"
 	const values = [post_id]
-	return (await connect.pool.query(sqltext,values)).rows
+	let comments = (await connect.pool.query(sqltext,values)).rows
+	for (let index = 0; index < comments.length; index++) {
+		const element = comments[index];
+		element['comment_owner_username'] = (await get_user_by_id(element.owner_id)).username
+		
+	}
+	return comments
 }
 
 

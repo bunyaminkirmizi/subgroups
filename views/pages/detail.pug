@@ -57,8 +57,7 @@ block content
             blockquote.blockquote.mb-0
               p=comment.body
               
-          .card-header='user_id' + comment.owner_id + ' '+ comment.send_timestamp.toLocaleString("tr-TR", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})
-        
+          .card-header=comment.comment_owner_username + ' '+ comment.send_timestamp.toLocaleString("tr-TR", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})
     .modal(id='updatePostModal'+post.post_id tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
       .modal-dialog.modal-lg
         .modal-content

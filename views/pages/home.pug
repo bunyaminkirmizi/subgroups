@@ -1,4 +1,6 @@
 extends ../base.pug
+include mixins/group_thumbnail
+include mixins/post_thumbnail
 
 block content
   if is_authenticated
@@ -18,25 +20,25 @@ block content
               br
               a.btn.btn-info.ms-6.mt-2.mb-2(href="/howto/") Nasıl kullanacağını öğren
   .row.mt-2
-    .col-md-6
+    .col-md-4
       .card
         h5.card-header='🔥 Popüler gruplar'
         .card-body
           each grp in statistics.populargroups
-            a(href='/group/'+grp.group_id)=grp.group_name
-            br
-    .col-md-6
+            +group_thumb(grp)
+            //- a(href='/group/'+grp.group_id)=grp.group_name
+            //- br
+    .col-md-4
       .card
         h5.card-header='👍 En çok öne çıkarılan gönderiler'
         .card-body
           each post in statistics.mostupvotedposts
             | #{post.count} oy ile
             | 
-            a(href='/post/detail?post_id='+post.post_id)=post.header
-            br
-
-  .row.mt-2
-    .col-md-6
+            +post_thumb(post)
+            //- a(href='/post/detail?post_id='+post.post_id)=post.header
+            //- br
+    .col-md-4
       .card
         h5.card-header='📈 İstatistikler'
         .card-body
@@ -52,12 +54,3 @@ block content
           br
           strong=statistics.newgroups
           |  yeni grup oluşturuldu
-    .col-md-6       
-      .card
-        h5.card-header='Haftanın Enleri'
-        .card-body
-          if mostvoted
-            a(href=statistics.mostvoted) en çok oylanan gönderi #{statistics.mostvoted.header}
-            br
-          a(href=statistics.activegroup) en aktif grup
-          br

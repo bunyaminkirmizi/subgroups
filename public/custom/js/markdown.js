@@ -52,13 +52,15 @@ if(codemrr){
 }
 
 //thumnail process
-// for (let i of document.getElementsByClassName('textthumbnail')) {
-//     const thumbnailpostid = i.getElementsByTagName('a')[0].id
-//     const d = i.parentNode.getElementsByClassName('thumbnailpost')[0]
-//     var list =i.getElementsByTagName('img')
-//     for (var s = list.length-1; s >= 0; s--) {
-//         console.log(s,list[s]); //second console output
-//         d.src = list[s].src
-//         list[s].remove()
-//     }
-// }
+for (let i of document.getElementsByClassName('textthumbnail')) {
+    const thumbnailpostid = i.getElementsByTagName('a')[0].id
+    const d = i.parentNode.getElementsByClassName('thumbnailpost')[0]
+	// const obj = i.parentNode.getElementsByClassName('obj')[0]
+    var list =i.getElementsByTagName('img')
+    for (var s = list.length-1; s >= 0; s--) {
+        // console.log(s,list[s]); //second console output
+        d.src = list[s].src
+		// obj.data = list[s].src
+        list[s].remove()
+    }
+}

@@ -52,7 +52,7 @@ function activegroup(){
 
 async function populargroups(){
 	const SQLtext = `
-	SELECT groups.group_id,groups.group_name,count(lastsevendaysposts.post_id)
+	SELECT groups.group_id,groups.group_name,groups.bannerfilename,groups.group_info,count(lastsevendaysposts.post_id)
 	FROM groups
 	RIGHT JOIN (select * from posts WHERE send_timestamp > current_date - interval '7 days') as lastsevendaysposts
 	ON lastsevendaysposts.group_id = groups.group_id group by groups.group_id order by count desc limit 5;`

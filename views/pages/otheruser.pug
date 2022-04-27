@@ -1,0 +1,100 @@
+extends ../base.pug
+
+block content
+
+  .bg-white.border.rounded-5
+  section.w-100.p-4(style='background-color: #eee; border-radius: .5rem .5rem 0 0;')
+    .row
+      .col-lg-4
+        .card.mb-4
+          .card-body.text-center
+            div
+              img.ms-2.rounded-circle(src='/profile_photos/'+profile_user.profile_photo_path style='background-color: #f3f4f6;width: 150px;height:150px;')
+            #changeProfilePhotoModal.modal(tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
+              .modal-dialog.modal-lg
+                .modal-content
+                  .modal-header
+                    h5#groupsModalSmLabel.modal-title.h4 Profil fotoğrafını değiştir
+                    button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                  .modal-body
+                    form#changebannerform.row.g-3(action='/user/changepp/'+user.user_id method='post' enctype="multipart/form-data")
+                      input#bannerFile.form-control.md-3.mb-2(type='file' accept="image/*" name='userpp' required="required")
+                      button.btn.btn-outline-success.float-end(type='submit') Değiştir
+            h5.my-3=profile_user.username
+            p.text-muted.mb-1=profile_user.profile_about_text
+            p.text-muted.mb-4=profile_user.register_timestamp.toLocaleString("tr-TR", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})
+            .d-flex.justify-content-center.mb-2
+              button.btn.btn-primary(type='button') Takip Et
+              button.btn.btn-outline-primary.ms-2(type='button' style="height = 38px;" data-bs-toggle='modal' data-bs-target='#exampleModal' data-bs-whatever=profile_user.username)
+                i.fa-solid.fa-paper-plane
+            //-   button.btn.btn-outline-primary.ms-2(type='button' style="height = 38px;" data-bs-toggle='modal' data-bs-target='#changeProfileAbout' data-bs-whatever=profile_user.username)
+            //-     i.fa-solid.fa-pencil
+        //- open after follower feature added
+        //- .card.mb-4.mb-lg-0
+        //-   .card-body.p-0
+        //-     ul.list-group.list-group-flush.rounded-3
+        //-       li.list-group-item.d-flex.justify-content-between.align-items-center.p-3
+        //-         i.fas.fa-users.fa-lg.text-secondary
+        //-         p.mb-0 {x} takipçi
+      .col-lg-8
+        .card.mb-4
+          .card-body
+            .row
+              .col-sm-3
+                p.mb-0 E-posta
+              .col-sm-9
+                p.text-muted.mb-0=profile_user.email
+            hr
+            .row
+              .col-sm-3
+                p.mb-0 Gönderi Sayısı
+              .col-sm-9
+                p.text-muted.mb-0=user_post_count.count
+            hr
+            .row
+              .col-sm-3
+                p.mb-0 Yorum Sayısı
+              .col-sm-9
+                p.text-muted.mb-0=user_comment_count.count
+        
+        .row
+          .col-md-6
+            .card.mb-4.mb-md-0
+              .card-body
+                p.mb-4
+                  span.text-primary.font-italic.me-1 Son
+                  | yorumlar
+                each comment in last_comments
+                    hr
+                    a.card-text(href='/post/detail?post_id='+comment.post_id)=comment.body
+                    .card-text=comment.send_timestamp.toLocaleString("tr-TR", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})
+          .col-md-6
+            .card.mb-4.mb-md-0
+              .card-body
+                p.mb-4
+                  span.text-primary.font-italic.me-1 Son
+                  | gönderileri
+                  each post in last_posts
+                    hr
+                    a.card-text(href='/post/detail?post_id='+post.post_id)=post.header
+                    .card-text=post.send_timestamp.toLocaleString("tr-TR", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})
+  #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+    .modal-dialog
+      .modal-content
+        h5#exampleModalLabel.modal-header
+          .modal-body
+            form
+              .mb-3
+                label.col-form-label(for='message-text') Mesaj:
+                textarea#message-text.form-control
+          .modal-footer
+            button.btn.btn-outline-success(type='button') Gönder
+  #changeProfileAbout.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+    .modal-dialog
+      .modal-content
+        h5#exampleModalLabel.modal-header Düzenle
+        .modal-body
+          form(action='/user/profile/changeabout/' method='post')
+            .mb-3
+              textarea#message-text.form-control(name="abouttext" placeholder='Kullanıcı sayfanızdaki yazıyı düzenleyin')
+              button.btn.btn-outline-success.mt-2.float-end(type='submit') Gönder

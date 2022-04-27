@@ -7,6 +7,7 @@ const groups = require("../db/groups");
 const votes = require("../db/votes");
 const comments = require("../db/comments");
 const { del_baner } = require("../db/groups");
+const users = require("../db/users");
 
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
@@ -51,6 +52,7 @@ router.get('/detail', async (req, res) => {
 	const group_id = post.group_id
 	const current_group = await groups.get_group(group_id)
 	if(current_group != undefined){
+		const commentofpage = await comments.get_comment_by_post(post_id)
 		const g_dropdown = {
 		current:current_group,
 		parent:{"group_id":"2","group_name":"parent"},

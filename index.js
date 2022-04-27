@@ -94,8 +94,8 @@ app.get('/', async (req, res) => {
       is_authenticated:  true,
       groups_user_joined: await groups.get_user_participant_groups(user_id),
       posts_from_user_joined_groups: await posts.get_user_joined_group_posts(user_id),
-      user_owned_groups: await groups.get_user_owned_groups(
-        _from_public_groups(5),
+      user_owned_groups: await groups.get_user_owned_groups(user_id),
+      last_posts_from_public_groups: await posts.last_posts_from_public_groups(5),
       new_groups: await groups.new_groups(5)
      })
      return;
@@ -140,7 +140,7 @@ app.get('/howto', async (req, res) => {
 
 app.get('/user/:user_id',auth.authentication_required, async (req, res) => {
   const user_id = req.params.user_id
-  res.render('pages/profile', {
+  res.render('pages/otheruser', {
     title: 'subgroups',
     user:req.session.user,
     profile_user:await get_user_by_id(user_id),
