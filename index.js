@@ -3,7 +3,7 @@ const express = require('express')
 const session = require('express-session')
 const multer  = require('multer')
 
-const upload = multer({ dest: './public/images/',limits: { fileSize: 1000000*90 } })
+const upload = multer({ dest: './uploads/posts/',limits: { fileSize: 1000000*90 } })
 const banner_upload = multer({ dest: './public/group_banners/',limits: { fileSize: 1000000*90 } })
 const user_pp_upload = multer({ dest: './public/profile_photos/',limits: { fileSize: 1000000*90 } })
 
@@ -23,7 +23,7 @@ app.post('/upload/:filename', upload.single('filename'), (req, res) => {
   let filepath = null
   if(req.file){
     console.log("file uploaded"+req.file.filename)
-    filepath = "/images/"+req.file.filename
+    filepath = "/post/uploads/posts/"+req.file.filename
   }else{
     console.log("req.file didn't worked");
   }
@@ -247,6 +247,8 @@ app.get('/group/join/:group_id',auth.authentication_required, async (req, res) =
   console.log("joingroup=>",await groups.is_participant(user_id,group_id));
   res.redirect('/group/'+req.params.group_id)
 })
+
+
 
 async function group_ownership_required(req,res,next) {
 	const user_id = req.session.user.user_id

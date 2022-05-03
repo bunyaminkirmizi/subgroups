@@ -15,10 +15,11 @@ const connect = require('./connect');
 const users = require('./users');
 const votes = require('./votes');
 
-async function add_post(user_id,group_id,header,body) {
+async function add_post(user_id,group_id,header,body,multimedia_paths) {
+		console.log('databaseeeee',multimedia_paths)
 		connect.pool.query(
-			"INSERT INTO posts(user_id,group_id,header,body,send_timestamp) values($1,$2,$3,$4,current_timestamp)",
-			[user_id,group_id,header,body],
+			"INSERT INTO posts(user_id,group_id,header,body,multimedia_paths,send_timestamp) values($1,$2,$3,$4,$5,current_timestamp)",
+			[user_id,group_id,header,body,multimedia_paths],
 			(err)=>console.log(err))
 	}
 	
@@ -204,7 +205,7 @@ async function user_post_count(user_id) {
 	}
 
 async function get_user_joined_group_posts(user_id) {
-	const sqltext = `SELECT users.username,users.user_id,users.profile_photo_path,userposts.header,userposts.body,userposts.send_timestamp,userposts.post_id from users
+	const sqltext = `SELECT users.username,users.user_id,users.profile_photo_path,userposts.header,userposts.body,userposts.send_timestamp,userposts.post_id,userposts.multimedia_paths from users
 	RIGHT JOIN (SELECT *
 	FROM (select group_id from group_participants where user_id = $1) as usergroups
 	INNER JOIN posts 
@@ -218,6 +219,7 @@ async function get_user_joined_group_posts(user_id) {
 		}
 	return null
 	}
+
 async function last_posts_from_public_groups(limit) {
 	const sqltext = 'SELECT * FROM posts order by send_timestamp desc limit $1;'
 	const values = [limit]

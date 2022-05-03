@@ -34,7 +34,8 @@ CREATE TABLE IF NOT EXISTS posts (
   group_id int NOT NULL REFERENCES groups(group_id) ON DELETE CASCADE,
   header varchar(50),
   body TEXT NOT NULL,
-  send_timestamp timestamp
+  send_timestamp timestamp,
+  multimedia_paths varchar(255) ARRAY
 );
 
 CREATE TABLE IF NOT EXISTS groups_hierarchy (

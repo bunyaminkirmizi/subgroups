@@ -1,8 +1,10 @@
 mixin post_thumb(post)
   //- h1=JSON.stringify(post)
   .card.mb-3.bordered.button-to-the-top.overflowhidden
+      
       .row.g-0
-        .col-md-2.text-center.mt-2    
+       
+        .col-md-2.text-center.mt-2
           if post.send_timestamp
             .text-secondary=post.send_timestamp.toLocaleString("tr-TR", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})
           div.mt-2.mb-1.text-center
@@ -14,5 +16,7 @@ mixin post_thumb(post)
             a.stretched-link(href='/post/detail?post_id='+post.post_id id=post.post_id)
             .card-body.fixedcardsize
               h5.card-title=post.header
-              p.card-text.markdown_detailed_render=post.body
-        img.p-0.me-0.col-md-2.img-fluid(class="thumbnailpost" onerror="this.onerror=null; this.src='/assets/images/1pixelwhite.png'" src='', alt='', loading='lazy')
+              p.card-text=post.body
+        
+        if (post.multimedia_paths)
+          img.p-0.me-0.col-md-2.img-fluid(class="thumbnailpost" src=post.multimedia_paths[0]   onerror="this.onerror=null; this.src='/assets/images/1pixelwhite.png'" alt='' loading='lazy')

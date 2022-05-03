@@ -114,6 +114,7 @@ public/bootstrap
 public/fontawesome
 
 #uploaded_images
+/uploads
 public/images
 public/test.html
 public/assets

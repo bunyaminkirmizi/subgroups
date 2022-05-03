@@ -30,7 +30,10 @@ router.post('/new/',auth.authentication_required, async (req, res) => {
 	const post_body = req.body.post_body
 	const post_header = req.body.post_header
 	const user_id = req.session.user.user_id
-	await posts.add_post(user_id,group_id,post_header,post_body)
+	const multimedia_paths= req.body.images.split(',')
+	console.log('multimedia_pathsssssss===>',multimedia_paths)
+
+	await posts.add_post(user_id,group_id,post_header,post_body,multimedia_paths)
 	res.redirect('/group/'+group_id)
   
   })
@@ -43,6 +46,11 @@ router.post('/sendcomment/:post_id',auth.authentication_required, async (req, re
 
 	res.redirect('/post/detail?post_id='+post_id)
 })
+router.get('/uploads/posts/:filename', function (req, res) {
+	const filepath = './uploads/posts/'+req.params.filename
+	res.sendFile(filepath, { root: require('path').resolve(__dirname, '..') });
+  });
+
 router.get('/detail', async (req, res) => {
 	const post_id = req.query.post_id
 	const post = await posts.get_post_with_user_given_vote(post_id,req.session.user)

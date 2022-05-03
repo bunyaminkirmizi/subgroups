@@ -106,6 +106,13 @@ a:active {
 }
 
 /* register and login pages */
+.zoominresponsive {
+	height: 210px;
+	/* height: 100%; */
+	/* background-image: url('https://placeimg.com/1000/450/nature'); */
+	/* background-position: center center;
+	background-size: cover; */
+}
 
 .login-container {
 	background: #007bff;

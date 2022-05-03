@@ -34,8 +34,13 @@ function giveupvote(post) {
 function givedownvote(post) {
 	givevote(post,'down')
 }
+
+let uploadedfiles =[]
 function addphotototextarea (nameofphoto,url) {
 	console.log(url)
+	if (!uploadedfiles.includes(url)) uploadedfiles.push(url);
+	const imgs = document.getElementById('images')
+	imgs.value = uploadedfiles
 	simplemde.value(simplemde.value() + `![${nameofphoto}](${url})`)
 }
 async function uploadfile() {

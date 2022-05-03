@@ -171,6 +171,7 @@ if group
             input.form-control(type='text' name='post_header' minLength="5" placeholder='Gönderi başlığı')
             textarea#editor.form-control.mt-0( name='post_body' rows='15' placeholder="İçerik")
             input#hidden2(type='hidden' name='group_id' value=group.current.group_id)
+            input#images(type='hidden' name='images' value='')
             button.btn.btn-outline-success.float-end(type='submit') Gönder
   #deleteGroupModal.modal(tabindex='-1' aria-labelledby='groupsModalSmLabel' style='display: none;' aria-hidden='true')
     .modal-dialog.modal-md
