@@ -5,7 +5,6 @@ const multer  = require('multer')
 
 const upload = multer({ dest: './uploads/posts/',limits: { fileSize: 1000000*90 } })
 const banner_upload = multer({ dest: './public/group_banners/',limits: { fileSize: 1000000*90 } })
-const user_pp_upload = multer({ dest: './public/profile_photos/',limits: { fileSize: 1000000*90 } })
 
 require("dotenv").config();
 const app = express()
@@ -44,19 +43,7 @@ app.post('/group/changebanner/:group_id', banner_upload.single('group_banner_fil
   }
   res.redirect('/group/'+group_id)
 })
-app.post('/user/changepp/:user_id', user_pp_upload.single('userpp'), async (req, res) => {
-  const user_id = req.session.user.user_id
-  let filepath = null
-  if(req.file){
-    const pp_path = req.file.filename
-    await users.add_profile_photo(user_id,pp_path)
-    //update session for profile photo
-    req.session.user = await get_user_by_id(user_id)
-  }else{
-    console.log("req.file didn't worked");
-  }
-  res.redirect('/user/profile/')
-})
+
 
 const user = require("./router/user");
 const post = require("./router/post");
@@ -72,13 +59,13 @@ const groups = require('./db/groups');
 const posts = require('./db/posts')
 const { TreeNode } = require('./db/tree')
 const stats = require('./db/stats')
-const { info } = require('console')
-const { is_authanticated, authentication_required } = require('./db/auth')
-const { redirect } = require('express/lib/response')
-const comments = require('./db/comments')
-const { get_user_by_id } = require('./db/users')
-const users = require('./db/users')
-const { last_posts_from_public_groups } = require('./db/posts')
+// const { info } = require('console')
+// const { is_authanticated, authentication_required } = require('./db/auth')
+// const { redirect } = require('express/lib/response')
+// const comments = require('./db/comments')
+// const { get_user_by_id } = require('./db/users')
+// const users = require('./db/users')
+// const { last_posts_from_public_groups } = require('./db/posts')
 
 app.use(express.urlencoded({ extended: true })); //Used fore parsing body elements
 app.set('trust proxy', 1) // trust first proxy
@@ -114,20 +101,7 @@ app.get('/', async (req, res) => {
     }
   )
   
-app.get('/user/profile',auth.authentication_required, async (req, res) => {
-  const user_id = req.session.user.user_id
-  console.log(req.session.user)
-  res.render('pages/profile', {
-    title: 'subgroups',
-    user:req.session.user,
-    profile_user:await users.get_user_by_id(user_id),
-    is_authenticated: auth.is_authanticated(req.session),
-    last_posts: await posts.last_posts_by_user(user_id,5),
-    last_comments: await comments.last_comments_by_user(user_id,5),
-    user_post_count: await posts.user_post_count(user_id),
-    user_comment_count: await comments.user_comment_count(user_id)
-  })
-})
+
 
 app.get('/howto', async (req, res) => {
   // const user_id = req.session.user.user_id
@@ -139,20 +113,7 @@ app.get('/howto', async (req, res) => {
   })
 })
 
-app.get('/user/:user_id',auth.authentication_required, async (req, res) => {
-  const user_id = req.params.user_id
-  res.render('pages/otheruser', {
-    title: 'subgroups',
-    user:req.session.user,
-    profile_user:await get_user_by_id(user_id),
-    is_authenticated: auth.is_authanticated(req.session),
-    last_posts: await posts.last_posts_by_user(user_id,5),
-    last_comments: await comments.last_comments_by_user(user_id,5),
-    user_post_count: await posts.user_post_count(user_id),
-    user_comment_count: await comments.user_comment_count(user_id),
 
-  })
-})
 
 app.get('/group/delete/:group_id',auth.authentication_required,group_ownership_required, async (req, res) => {
   const group_id = req.params.group_id
@@ -327,12 +288,6 @@ app.post('/login/', async (req, res) => {
     })}
   })
 
-app.post('/user/profile/changeabout/',auth.authentication_required, async (req, res) => {
-  const profileabouttext = req.body.abouttext
-  const user_id = req.session.user.user_id
-  users.add_about_text(user_id,profileabouttext)
-  res.redirect('/user/profile/')
-  })
 
 app.post('/group/changeabout/:group_id',auth.authentication_required, async (req, res) => {
   const group_about_text = req.body.groupabouttext

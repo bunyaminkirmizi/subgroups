@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS messages (
   user_id_receiver int NOT NULL REFERENCES users(user_id),
   header varchar(30) NOT NULL,
   cryptic_text TEXT NOT NULL,
+  is_read boolean DEFAULT FALSE NOT NULL,
   send_timestamp timestamp
 );
 

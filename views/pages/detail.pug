@@ -4,7 +4,7 @@ block content
     .card.mb-3.button-to-the-top.mt-2
       .row.g-0
         .col-md-2.text-center.mt-2
-          a.mt-2.mb-1(href='/user/'+post.user_id)
+          a.mt-2.mb-1(href='/user/id/'+post.user_id)
             img.rounded-circle.p-0(src='/profile_photos/'+post.sender_photo height='60' width='60' alt='profile photo nav' loading='lazy')
             .pt-1.pb-1.fluid=post.sender
           if is_authenticated

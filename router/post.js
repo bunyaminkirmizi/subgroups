@@ -1,13 +1,10 @@
 const express = require("express");
-const session = require("express-session");
 const { authentication_required } = require("../db/auth");
 const auth = require("../db/auth");
 const posts = require("../db/posts");
 const groups = require("../db/groups");
 const votes = require("../db/votes");
 const comments = require("../db/comments");
-const { del_baner } = require("../db/groups");
-const users = require("../db/users");
 
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));

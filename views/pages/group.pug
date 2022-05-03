@@ -81,7 +81,7 @@ block content
              .text-secondary #{post.send_timestamp.toLocaleString("tr-TR", {day: "numeric",month: "short",year: "numeric",hour: "numeric",minute: "2-digit"})}
              div.mt-2.mb-1.text-center
               img.rounded-circle.p-0.me-2(src='/profile_photos/'+post.sender_photo height='27' width='27' alt='profile photo nav' loading='lazy')
-              a.stretched-link.pt-1.pb-1(href='/user/'+post.user_id)=post.sender
+              a.stretched-link.pt-1.pb-1(href='/user/id/'+post.user_id)=post.sender
            if (post.multimedia_paths)
             .col-md-8
                a.stretched-link(href='/post/detail?post_id='+post.post_id)

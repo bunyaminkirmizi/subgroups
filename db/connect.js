@@ -29,6 +29,7 @@ async function run_query_select_rows(query, values){
 		return null;
 	  }
 	}
+
 async function run_query_select_first_row(query, values){
 	try {
 		return (await pool.query(query, values)).rows[0]
@@ -38,9 +39,17 @@ async function run_query_select_first_row(query, values){
 		return null;
 		}
 	}
+	
+async function run_query_no_rows(sqltext, values){
+	pool.query(
+		sqltext,
+		values,
+		(err)=>console.log(err))
+	}
 
 module.exports = {
 	pool: pool,
 	run_query_select_rows:run_query_select_rows,
-	run_query_select_first_row:run_query_select_first_row
+	run_query_select_first_row:run_query_select_first_row,
+	run_query_no_rows:run_query_no_rows
 };
