@@ -2,45 +2,46 @@ extends ../base.pug
 include mixins/group_thumbnail
 include mixins/post_thumbnail
 block content
-  .ms-2.me-2
-    if is_authenticated
-      .row.mt-2
-        .col-md-8
-          .card
-            h5.card-header='Bulunduğum gruplardan gönderiler'
-            .card-body
-              
-              if posts_from_user_joined_groups
-                each post in posts_from_user_joined_groups
-                  +post_thumb(post)
-              else
-                h1= JSON.stringify(posts_from_user_joined_groups)
-        .col-md-4
-          .col-md-12
-            .card.mt-1
-              .card-header
-                h5.p-0.m-0='Dahil olduğum gruplar'
+  .container
+    .ms-2.me-2
+      if is_authenticated
+        .row.mt-2
+          .col-md-8
+            .card
+              h5.card-header='Bulunduğum gruplardan gönderiler'
               .card-body
-                each group in groups_user_joined
-                    +group_thumb(group)
-
-            .card.mt-1
-
-              .card-header
-                h5='Bana ait gruplar'
-                  a.btn.btn-primary.me-2.float-end(type='button' data-bs-toggle='modal' data-bs-target='#groupsModalSm')
-                    i.mt-1.fas.fa-plus
-              .card-body
-                each group in user_owned_groups
-                      +group_thumb(group)
-
-            .card.mt-1
-                h5.card-header='Son Gönderiler'
+                
+                if posts_from_user_joined_groups
+                  each post in posts_from_user_joined_groups
+                    +post_thumb(post)
+                else
+                  h1= JSON.stringify(posts_from_user_joined_groups)
+          .col-md-4
+            .col-md-12
+              .card.mt-1
+                .card-header
+                  h5.p-0.m-0='Dahil olduğum gruplar'
                 .card-body
-                  each post in last_posts_from_public_groups
-                      +post_thumb(post)
-            .card.mt-1
-              h5.card-header='Yeni gruplar'
-              .card-body
-                  each group in new_groups
+                  each group in groups_user_joined
                       +group_thumb(group)
+
+              .card.mt-1
+
+                .card-header
+                  h5='Bana ait gruplar'
+                    a.btn.btn-primary.me-2.float-end(type='button' data-bs-toggle='modal' data-bs-target='#groupsModalSm')
+                      i.mt-1.fas.fa-plus
+                .card-body
+                  each group in user_owned_groups
+                        +group_thumb(group)
+
+              .card.mt-1
+                  h5.card-header='Son Gönderiler'
+                  .card-body
+                    each post in last_posts_from_public_groups
+                        +post_thumb(post)
+              .card.mt-1
+                h5.card-header='Yeni gruplar'
+                .card-body
+                    each group in new_groups
+                        +group_thumb(group)

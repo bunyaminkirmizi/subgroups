@@ -100,6 +100,7 @@ app.get('/', async (req, res) => {
      })
      return;
   }
+  
   console.log("entered homepage")
   res.render('pages/home', {
     title: 'subgroups',

@@ -3,54 +3,55 @@ include mixins/group_thumbnail
 include mixins/post_thumbnail
 
 block content
-  if is_authenticated
-      a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#groupsModalSm')
-        i.mt-1.fas.fa-plus
-  unless is_authenticated
-    .row
-      .card.text-white.mt-2.p-0
-        img.card-img.img-fluid(src='/assets/humansskyillutstraion.png')
-        .card-img-overlay
-          center.mt-4
-            h5.card-title Subgroups hakkında
-            p.card-text
-              | Burada kendinize ait gruplar oluşturabilir ve dilediğiniz gruplara katılıp gönderiler paylaşabilirsiniz.
-              br
-              a.btn.btn-warning.ms-6.mt-2.mb-2(href="/register/") Şimdi Kayıt Ol
-              br
-              a.btn.btn-info.ms-6.mt-2.mb-2(href="/howto/") Nasıl kullanacağını öğren
-  .row.mt-2
-    .col-md-4
-      .card
-        h5.card-header='🔥 Popüler gruplar'
-        .card-body
-          each grp in statistics.populargroups
-            +group_thumb(grp)
-            //- a(href='/group/'+grp.group_id)=grp.group_name
-            //- br
-    .col-md-4
-      .card
-        h5.card-header='👍 En çok öne çıkarılan gönderiler'
-        .card-body
-          each post in statistics.mostupvotedposts
-            | #{post.count} oy ile
-            | 
-            +post_thumb(post)
-            //- a(href='/post/detail?post_id='+post.post_id)=post.header
-            //- br
-    .col-md-4
-      .card
-        h5.card-header='📈 İstatistikler'
-        .card-body
-          p='son 1 haftada:'
-          strong=statistics.registered
-          |  kişi kayıt oldu
-          br
-          strong=statistics.posted
-          |  gönderi paylaşıldı
-          br
-          strong=statistics.usedvotes
-          |  kez oy kullanıldı
-          br
-          strong=statistics.newgroups
-          |  yeni grup oluşturuldu
+  .container
+    if is_authenticated
+        a.btn.btn-primary.me-2(type='button' data-bs-toggle='modal' data-bs-target='#groupsModalSm')
+          i.mt-1.fas.fa-plus
+    unless is_authenticated
+      .row
+        .card.text-white.mt-2.p-0
+          img.card-img.img-fluid(src='/assets/humansskyillutstraion.png')
+          .card-img-overlay
+            center.mt-4
+              h5.card-title Subgroups hakkında
+              p.card-text
+                | Burada kendinize ait gruplar oluşturabilir ve dilediğiniz gruplara katılıp gönderiler paylaşabilirsiniz.
+                br
+                a.btn.btn-warning.ms-6.mt-2.mb-2(href="/register/") Şimdi Kayıt Ol
+                br
+                a.btn.btn-info.ms-6.mt-2.mb-2(href="/howto/") Nasıl kullanacağını öğren
+    .row.mt-2
+      .col-md-4
+        .card
+          h5.card-header='🔥 Popüler gruplar'
+          .card-body
+            each grp in statistics.populargroups
+              +group_thumb(grp)
+              //- a(href='/group/'+grp.group_id)=grp.group_name
+              //- br
+      .col-md-4
+        .card
+          h5.card-header='👍 En çok öne çıkarılan gönderiler'
+          .card-body
+            each post in statistics.mostupvotedposts
+              | #{post.count} oy ile
+              | 
+              +post_thumb(post)
+              //- a(href='/post/detail?post_id='+post.post_id)=post.header
+              //- br
+      .col-md-4
+        .card
+          h5.card-header='📈 İstatistikler'
+          .card-body
+            p='son 1 haftada:'
+            strong=statistics.registered
+            |  kişi kayıt oldu
+            br
+            strong=statistics.posted
+            |  gönderi paylaşıldı
+            br
+            strong=statistics.usedvotes
+            |  kez oy kullanıldı
+            br
+            strong=statistics.newgroups
+            |  yeni grup oluşturuldu
