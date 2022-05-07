@@ -52,7 +52,9 @@ nav.navbar.sticky-top.navbar-expand-lg.navbar-light.bg-light.pt-1.pb-2
                   a.dropdown-item(href="?filter=clear") Filtreyi Temizle
       .d-flex.ml-2.mb-0
         if is_authenticated             
-          .dropdown#dropdown_message_link.btn.btn-primary.me-2(href='messagebox' role='button' data-bs-toggle='dropdown' aria-expanded='false')
+          //- .dropdown#dropdown_message_link.btn.btn-primary.me-2(href='messagebox' role='button' data-bs-toggle='dropdown' aria-expanded='false')
+          //-     i.mt-1.fas.fa-envelope
+          a.btn.btn-primary.me-2(href='/message/inbox')
               i.mt-1.fas.fa-envelope
           ul.dropdown-menu.dropdown-menu-end(aria-labelledby='dropdown_message_link')
             .card(style='width: 18rem;')

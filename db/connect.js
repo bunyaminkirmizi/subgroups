@@ -22,7 +22,11 @@ const pool = new Pool({
 
 async function run_query_select_rows(query, values) {
 	try {
-		return (await pool.query(query, values)).rows;
+		// console.log(`sql err:\nquery: ${query}\nvalues:${values}\n`);
+
+		const rows = (await pool.query(query, values)).rows;
+		// console.log("rows:", rows);
+		return rows;
 	} catch (err) {
 		console.error(`sql err:\nquery: ${query}\nvalues${values}`);
 		console.log(err.stack);

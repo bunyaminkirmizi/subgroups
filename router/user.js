@@ -1,5 +1,6 @@
 const express = require("express");
 const multer = require("multer");
+const { is_exist } = require("../db/auth");
 const auth = require("../db/auth");
 const comments = require("../db/comments");
 const posts = require("../db/posts");
@@ -60,7 +61,17 @@ router.get("/profile", auth.authentication_required, async (req, res) => {
 router.get("/id/:user_id", auth.authentication_required, async (req, res) => {
 	const user_id = req.params.user_id;
 	const is_authanticated = auth.is_authanticated(req.session);
-	const profile_user = await users.get_user_by_id(user_id);
+	let profile_user = null;
+	if (auth.is_exist(user_id)) {
+		profile_user = await users.get_user_by_id(user_id);
+	} else {
+		res.redirect("/404/");
+		return;
+	}
+	if (profile_user == null || profile_user == undefined) {
+		res.redirect("/404/");
+		return;
+	}
 	if (is_authanticated) {
 		if (req.session.user.user_id == profile_user.user_id) {
 			//user tries to see his own user page so redirect it to profile page

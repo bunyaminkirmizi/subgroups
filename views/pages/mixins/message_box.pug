@@ -1,0 +1,12 @@
+mixin msg_box(sender_photo_path,msgtext,is_photo_to_the_left)
+  .row.ms-2.me-2
+    .card.mt-2.mb-2
+      .row.g-0
+        if is_photo_to_the_left
+          img.rounded-circle.float-start.col-sm-2.mt-2.mb-2(style='width: 70px;height: 70px;' src=sender_photo_path height='70px' width='70px' alt='personofphoto')
+          .col-sm-9.text-center
+            p.muted-text=msgtext
+        else
+          .col-sm-10.text-center
+              p.muted-text=msgtext
+          img.rounded-circle.float-end.col-sm-2.ms-5.mt-2.mb-2(style='width: 70px;height: 70px;' src=sender_photo_path height='70px' width='70px' alt='personofphoto')

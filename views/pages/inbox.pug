@@ -1,0 +1,37 @@
+extends ../base.pug
+include mixins/message_box.pug
+
+block content
+  .container.mt-2
+    //- h1= JSON.stringify(last_messages)
+    .row
+      .col-3.mt-2
+        .card.h-75(style='min-height: 500px;')
+          .card-header gelen kutusu
+          .vh-100.overflow-hidden(style=" max-height: 500px;")
+            .h-100.scrollable.overflow-auto
+              each msg in last_messages
+                .card.mt-2.mb-2.ms-1.me-1
+                  .row.g-0
+                    img.rounded-circle.float-start.col-sm-4.mt-2.mb-2.ms-2(style='width: 70px;height: 70px;' src='/profile_photos/'+msg.profile_photo_path height='70px' width='70px' alt='personofphoto')
+                    .col-sm-8.text-center
+                      h5=msg.username
+                      p.muted-text=msg.cryptic_text
+                  a.stretched-link(href='/message/inbox/'+msg.counter)
+      .col-9.mt-2
+        .card.h-75(style='min-height: 500px;')
+          .card-header=`${sender_info.username} ile mesajlaş`
+          .vh-100.overflow-hidden(style=" max-height: 500px;")
+            #scroll.h-100.scrollable.overflow-auto(style="  display: flex;flex-direction: column-reverse;")
+              //- h1= JSON.stringify(messages)
+              each message in messages
+                if user.user_id == message.user_id_sender
+                  +msg_box('/profile_photos/'+user.profile_photo_path,message.cryptic_text,false)
+                else
+                  +msg_box('/profile_photos/'+sender_info.profile_photo_path,message.cryptic_text,true)
+          .card-footer.mt-auto
+            form(method='post')
+              .input-group.mb-3
+                input#mesgtxt.form-control(type='text' name='messagetext')
+                button.btn.btn-success.btn-end(type='submit')
+                  i.fa-solid.fa-paper-plane

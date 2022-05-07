@@ -128,6 +128,15 @@ function is_authanticated(session) {
 	}
 }
 
+function is_exist(user_id) {
+	const user = users.get_user_by_id(user_id);
+	if (user == null || user == undefined) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
 function allow_just_not_logged_in(req, res, next) {
 	if (is_authanticated(req.session)) {
 		res.redirect("/");
@@ -149,4 +158,5 @@ module.exports = {
 	is_authanticated: is_authanticated,
 	authentication_required: authentication_required,
 	allow_just_not_logged_in: allow_just_not_logged_in,
+	is_exist: is_exist,
 };
