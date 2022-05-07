@@ -1,24 +1,23 @@
 class TreeNode {
-	constructor(id,name) {
-	  this.id = id;
-	  this.name = name;
-	  this.descendants = [];
+	constructor(id, name) {
+		this.id = id;
+		this.name = name;
+		this.descendants = [];
 	}
 
-	add_child = (child) =>{
-		this.descendants.push(child)
-	}
+	add_child = (child) => {
+		this.descendants.push(child);
+	};
+}
 
-  }
-
-class Tree{
+class Tree {
 	constructor(root) {
 		this.root = root;
 		this.descendants = [];
-	  }
+	}
 }
-	
+
 module.exports = {
-	TreeNode:TreeNode,
-	Tree:Tree
-}
+	TreeNode: TreeNode,
+	Tree: Tree,
+};
