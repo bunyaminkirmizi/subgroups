@@ -5,6 +5,7 @@ const comments = require("../db/comments");
 const posts = require("../db/posts");
 const users = require("../db/users");
 const messages = require("../db/messages");
+const dbsrch = require("../db/search");
 const router = express.Router();
 
 const user_pp_upload = multer({
@@ -19,6 +20,9 @@ router.get("/", async (req, res) => {
 	// res.send(search_string);
 	const search = {
 		word: search_string,
+		posts: await dbsrch.in_posts(search_string),
+		// post_headers: await dbsrch.in_post_headers(search_string),
+		group_headers: await dbsrch.in_group_headers(search_string),
 	};
 	res.render("pages/search", {
 		title: "arama | " + search.word,

@@ -1,7 +1,25 @@
 extends ../base.pug
 include mixins/message_box.pug
-
+include mixins/group_thumbnail.pug
+include mixins/post_thumbnail.pug
+//- include mixins/group_thumbnail.pug
 block content
   .container.mt-2
+    h1 SONUÇLAR
     p aranan kelime/ler: #[strong #{search.word}]
+    p
+      strong gönderi: 
+    for pst in search.posts
+      +post_thumb(pst)
+    //- for pst in search.post_headers
+    //-   +post_thumb(pst)
+    //- p=JSON.stringify(search.posts)
+    //- br
+    //- p=JSON.stringify(search.post_headers)
+    br
+    p
+      strong gruplarda: 
+    for grp in search.group_headers
+      +group_thumb(grp)
+    //- p=JSON.stringify(search.group_headers)
     
