@@ -21,7 +21,7 @@ router.post(
 		const receiver_id = req.params.receiver_id;
 		const text = req.body.messagetext;
 		const header = req.body.messageheader;
-		messages.add_message(sender_id, receiver_id, header, text);
+		messages.add_message(sender_id, receiver_id, "header", text);
 		// res.send(`${sender_id},${receiver_id},${text}, ${header}`);
 
 		res.redirect("/message/inbox/" + receiver_id);
@@ -36,7 +36,7 @@ router.post(
 		const receiver_id = req.params.receiver_id;
 		const text = req.body.messagetext;
 		const header = "no header";
-		await messages.add_message(sender_id, receiver_id, header, text);
+		await messages.add_message(sender_id, receiver_id, "header", text);
 		// res.send(`${sender_id},${receiver_id},${text}, ${header}`);
 
 		res.redirect("/message/inbox/" + receiver_id);

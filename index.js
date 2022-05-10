@@ -27,11 +27,13 @@ const user = require("./router/user");
 const post = require("./router/post");
 const group = require("./router/group");
 const message = require("./router/message");
+const search = require("./router/search");
 
 app.use("/user", user);
 app.use("/message", message);
 app.use("/post", post);
 app.use("/group", group);
+app.use("/search", search);
 
 const port = process.env.PORT;
 const auth = require("./db/auth");

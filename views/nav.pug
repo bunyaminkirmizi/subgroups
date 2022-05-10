@@ -24,8 +24,8 @@ nav.navbar.sticky-top.navbar-expand-lg.navbar-light.bg-light.pt-1.pb-2
     #navbarSupportedContent.collapse.navbar-collapse
       ul.navbar-nav.me-auto.mb-lg-0
       
-      form.d-flex.me-auto.m-0
-        input.form-control.me-2(type='search' placeholder='ara' aria-label='Search')
+      form.d-flex.me-auto.m-0(method='get' action='/search')
+        input.form-control.me-2(type='search' name='searchstring' placeholder='ara' aria-label='Search')
         
         button.btn.btn-outline-success(type='submit') ara
         if group

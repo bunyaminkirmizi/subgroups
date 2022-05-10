@@ -86,7 +86,7 @@ block content
             form(method='post' action='/message/sendto/'+profile_user.user_id)
               .mb-3
                 label.col-form-label(for='message-text') Mesaj:
-                input#header-message-text.mb-2.form-control(name='messageheader' placeholder='Mesaj Başlığı')
+                //- input#header-message-text.mb-2.form-control(name='messageheader' placeholder='Mesaj Başlığı')
                 textarea#message-text.form-control(name='messagetext' placeholder='Mesaj İçeriği')
                 button.float-end.mt-2.btn.btn-outline-success(type='submit') Gönder
                 
