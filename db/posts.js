@@ -16,12 +16,18 @@ const users = require("./users");
 const votes = require("./votes");
 
 async function add_post(user_id, group_id, header, body, multimedia_paths) {
-	console.log("databaseeeee", multimedia_paths);
-	connect.pool.query(
-		"INSERT INTO posts(user_id,group_id,header,body,multimedia_paths,send_timestamp) values($1,$2,$3,$4,$5,current_timestamp)",
-		[user_id, group_id, header, body, multimedia_paths],
-		(err) => console.log(err)
+	const sqltext = "INSERT INTO posts(user_id,group_id,header,body,multimedia_paths,send_timestamp) values($1,$2,$3,$4,$5,current_timestamp) RETURNING post_id"
+	const values = [user_id, group_id, header, body, multimedia_paths]
+	try{
+		const added_post_id = await connect.pool.query(
+		sqltext,
+		values
 	);
+	return added_post_id.rows[0].post_id
+}catch(e){
+		console.log(e)
+	}
+	return null
 }
 
 async function update_post(post_id, header, body) {
@@ -59,7 +65,6 @@ async function get_post(post_id) {
 		let row = (await connect.pool.query(sqltext, values)).rows[0];
 		if (row != undefined) {
 			row["votecount"] = await votes.get_vote_count(post_id);
-
 			row["sender"] = (await users.get_user_by_id(row.user_id)).username;
 		}
 		return row;

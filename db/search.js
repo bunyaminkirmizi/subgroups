@@ -1,7 +1,7 @@
 const connect = require("./connect");
 
 async function in_posts(text) {
-	const sqltext = "SELECT * FROM posts WHERE header LIKE $1;";
+	const sqltext = "SELECT * FROM posts WHERE header LIKE $1 or body LIKE $1;";
 	text = `%${text}%`;
 	const values = [text];
 	return await connect.run_query_select_rows(sqltext, values);

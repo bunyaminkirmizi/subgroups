@@ -39,6 +39,22 @@ CREATE TABLE IF NOT EXISTS posts (
   multimedia_paths varchar(255) ARRAY
 );
 
+CREATE TABLE IF NOT EXISTS notifications (
+  notification_id BIGSERIAL PRIMARY KEY,
+  user_id int NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+  header varchar(50),
+  body TEXT NOT NULL,
+  send_timestamp timestamp,
+  icon_path varchar(255)
+);
+
+CREATE TABLE IF NOT EXISTS user_notification_info (
+  notification_id BIGSERIAL PRIMARY KEY,
+  user_id int NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+  auth varchar(250),
+  endpointurl varchar(300)
+);
+
 CREATE TABLE IF NOT EXISTS groups_hierarchy (
   group_id int NOT NULL,
   parent_group_id int NOT NULL

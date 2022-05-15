@@ -6,4 +6,6 @@ DROP TABLE  groups_hierarchy;
 DROP TABLE  posts;
 DROP TABLE  messages;
 DROP TABLE  groups;
+DROP TABLE notifications;
+DROP TABLE user_notification_info;
 DROP TABLE  users;

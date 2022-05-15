@@ -243,11 +243,14 @@ function del_info(group_id) {
 }
 
 async function get_user_participant_groups(user_id) {
-	const sqltext = `SELECT *
-	FROM (select * from group_participants where user_id = $1) as usergroups
-	LEFT JOIN groups
-	ON usergroups.group_id = groups.group_id;`;
+	const sqltext = `select group_id,notifications from group_participants where user_id = $1`;
 	const values = [user_id];
+	return (await connect.pool.query(sqltext, values)).rows;
+}
+
+async function get_group_participants(group_id) {
+	const sqltext = `SELECT user_id from group_participants where group_id = $1`;
+	const values = [group_id];
 	return (await connect.pool.query(sqltext, values)).rows;
 }
 
@@ -287,4 +290,5 @@ module.exports = {
 	get_user_participant_groups: get_user_participant_groups,
 	get_user_owned_groups: get_user_owned_groups,
 	new_groups: new_groups,
+	get_group_participants: get_group_participants
 };

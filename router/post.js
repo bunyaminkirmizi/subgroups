@@ -5,7 +5,7 @@ const posts = require("../db/posts");
 const groups = require("../db/groups");
 const votes = require("../db/votes");
 const comments = require("../db/comments");
-
+const service_notifications = require('../services/notifications');
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
 
@@ -20,33 +20,16 @@ async function ownership_required(req, res, next) {
 	} else {
 		console.log(
 			"delete rejected because post" +
-				post.post_id +
-				"owner is " +
-				post.user_id +
-				" but user" +
-				user_id +
-				"tried to delete it"
+			post.post_id +
+			"owner is " +
+			post.user_id +
+			" but user" +
+			user_id +
+			"tried to delete it"
 		);
 		res.redirect("/");
 	}
 }
-router.post("/new/", auth.authentication_required, async (req, res) => {
-	const group_id = req.body.group_id;
-	const post_body = req.body.post_body;
-	const post_header = req.body.post_header;
-	const user_id = req.session.user.user_id;
-	const multimedia_paths = req.body.images.split(",");
-	console.log("multimedia_pathsssssss===>", multimedia_paths);
-
-	await posts.add_post(
-		user_id,
-		group_id,
-		post_header,
-		post_body,
-		multimedia_paths
-	);
-	res.redirect("/group/" + group_id);
-});
 
 router.post(
 	"/sendcomment/:post_id",
