@@ -1,9 +1,0 @@
-[subgroups@fedora subgroups]$ ./node_modules/.bin/web-push generate-vapid-keys
-
-=======================================
-
-Public Key:
-BHKZ8uO6aZgAvzK5OcjyXcqv6BoZ8muK85w6zwtDgTNSJwgEZoVEHctIyXTkU9xUksoOU7hoW0Dhg7gyIzfg7QE
-
-Private Key:
-cBeNiC3Y9D7Ly9s1H5Wp4TkwisF2qvEXLIU4hOYyUxQ

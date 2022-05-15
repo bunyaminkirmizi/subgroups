@@ -249,10 +249,15 @@ app.post("/post/new/", auth.authentication_required, async (req, res) => {
 		post_body,
 		multimedia_paths
 	);
-	console.log('mpaths==>', multimedia_paths)
+	let iconurl = ''
+	if (multimedia_paths == ['']) {
+		iconurl = '/favicon.ico'
+	} else {
+		iconurl = multimedia_paths[0]
+	}
 	io.to(room).emit('notification', {
 		title: post_header,
-		icon: post_header,
+		icon: iconurl,
 		body: post_body,
 		onclickurl: `http://localhost:9095/post/detail?post_id=${lastpostid}`
 	})

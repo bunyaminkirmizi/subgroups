@@ -5,7 +5,6 @@ const posts = require("../db/posts");
 const groups = require("../db/groups");
 const votes = require("../db/votes");
 const comments = require("../db/comments");
-const service_notifications = require('../services/notifications');
 const router = express.Router();
 router.use(express.urlencoded({ extended: true }));
 
